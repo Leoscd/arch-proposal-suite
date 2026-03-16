@@ -1,0 +1,54 @@
+﻿material,precio_ars,fuente,nota
+acero_10mm_barra,22109.43,ALETADO - BARRA X 12 M. TORSIONADOS Ø 10mm Acindar x barra,
+acero_12mm_barra,32524.05,ALETADO - BARRA X 12 M. TORSIONADOS Ø 12mm Acindar x barra,
+acero_16mm_barra,57168.3,ALETADO - BARRA X 12 M. TORSIONADOS Ø 16mm Acindar x barra,
+acero_20mm_barra,86942.49,ACERO ADN-420 TORSION. Ø 20 MM,
+acero_6mm_barra,8329.71,ALETADO - BARRA X 12 M. TORSIONADOS Ø 6mm Acindar x barra,
+acero_8mm_barra,14161.5,ALETADO - BARRA X 12 M. TORSIONADOS Ø 8mm Acindar x barra,
+adhesivo_ceramico_kg,759.31,Pegamento imp. X 30 kg,ARS/kg (÷30)
+alambre_galv_kg,6599.62,"Galvanizado 1,63mm x kg",
+alambre_kg,1029.03,Recocido 16 x 50kg,ARS/kg (÷50)
+arena_fina_m3,36475.31,Arena fina x m3,
+arena_m3,27675.82,Arena mediana x m3,
+bloque_13_un,1809.57,BLOQUES LISOS 13 X 19 X 39,
+bloque_19_un,1809.57,BLOQUES LISOS 13 X 19 X 39,
+bolsa_plasticor,17166.1,Parex Duo (revoque p/interior) x 25 kg.,Parex Duo 25kg como proxy Plasticor
+bovedilla_10_un,6549.94,Bovedillas telgopor 10 x 42 x 100 c/u,
+bovedilla_12_un,7960.7,bovedillas telgopor 12 x 42 x 100 c/u,
+cemento_kg,272.5,Loma negra x 50kg,Loma Negra 50kg
+cemento_kg_holcim,251.5,Holcim x 50kg,
+ceramico_m2,8217.59,CERÁMICOS Marca varias x m2 desde,
+chapa_acan_ml,20335.34,Chapa acan. C.25 x m,
+chapa_ml,27961.09,Chapa trap. C. 25 x m,
+clavos_kg,4575.73,"Clavos punta paris caja 30kg 2""",ARS/kg (÷30)
+hidrofugo_lt,1658.97,HIDROFUGO KLAUKOL BALDE X 4 KGS,ARS/lt (÷4) Asume balde de 4kg/lt
+hormigon_h17_m3,184205.98,H 17 por m3,
+hormigon_h30_m3,286246.01,H30 por m3,
+ladrillo_comun_un,200.93,COMUNES PUESTO EN OBRA Ladrillo común x mil,ARS/un (÷1000)
+ladrillo_hueco_18_un,935.3,CERAMICOS HUECOS Para tabique y cerrameintos 18 x 18 x 25,
+lana_mineral_m2,6599.62,Isolant TBA de 10mm x20m2,Proxy lana mineral ARS/m2 (÷20)
+malla_q131_un,62318.64,"MALLA Q 131 SIMA 15 X 15 * Ø 5 MM * 3 x 2,40 MTS MINI",
+malla_r131_un,49699.57,"MALLA R 131 SIMA 15 X 25 * Ø 5 MM * 3 x 2,40 MTS MINI",
+membrana_m2,3831.89,Membrana x 10m2 don aluminio,ARS/m2 (÷10)
+pastina_kg,4819.85,Pastina blanca x 1kg,
+pintura_asfaltica_lt,7788.89,Megaflex pintura asfaltica x 18 lts.,
+pintura_latex_ext_lt,5109.38,LÁTEX PARA EXTERIOR X 20 litros,
+pintura_latex_lt,4375.26,LÁTEX PARA INTERIOR X 20 litros,ARS/lt (÷20)
+placa_durlock_95_m2,6997.8,"Placa Durlock 9,5mm (1,20 x 2,40) x unidad",
+placa_durlock_m2,8909.88,"Placa Durlock 12,5mm (1,20 x 2,40) x unidad",÷ 2.88m2 por placa
+porcelanato_m2,14152.99,CERÁMICOS Porcallanato marcas varias x m2 desde,
+puerta_alum_90x205_un,261051.59,"Puerta Moderna 0,90 X 2,05 mts.",
+ripio_bruto_m3,18947.29,Ripio bruto grueso x m3,
+ripio_m3,47545.63,Ripio 1:3 x m3,
+sellador_lt,7973.47,FIJADOR SELLADOR X 20 litros Alba,
+stuko_exterior_bolsa25,19160.18,Stuko fino a la cal exterior x 25 kg.,
+stuko_interior_bolsa25,17167.52,Stuko fino a la cal interior x 25 kg.,
+teja_colonial_un,1916.02,Teja colonial c/u,
+teja_francesa_un,5109.38,Teja francesa natural c/u,
+ventana_alum_90x120_un,245109.23,"Ventana 0,90 x 1,20 mts.",
+vidrio_4mm_m2,38036.51,Critsal float 4mm x m2 sin colocar,
+vidrio_6mm_m2,57672.15,Critsal float 6mm x m2 sin colocar,
+vigueta_48m_un,23801.2,"VIGUETAS 4,80 mts.",
+vigueta_4m_un,22850.29,"VIGUETAS 4,00 mts.",
+vigueta_5m_un,24979.2,"VIGUETAS 5,00 mts.",
+yeso_kg,348.29,Yeso San Puntano x 40 kg.,ARS/kg (÷40)

@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entorno virtual (Windows)
+.venv/
+
+# Dashboard — Node modules y build
+dashboard/node_modules/
+dashboard/.next/
+dashboard/out/
+
+# Outputs generados (se regeneran con los scripts)
+outputs/landing/
+outputs/auditorias/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.swp

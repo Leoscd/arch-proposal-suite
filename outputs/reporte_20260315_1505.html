@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presupuesto — Casa Garcia</title>
+  <style>
+    /* ── VARIABLES ─────────────────────────────── */
+    :root {
+      --color-primario:  #1a2f4e;
+      --color-acento:    #2d6a9f;
+      --color-critico:   #c0392b;
+      --color-ok:        #27ae60;
+      --color-bg-alt:    #f4f7fb;
+      --color-borde:     #d0dae6;
+      --fuente:          'Segoe UI', Arial, sans-serif;
+    }
+
+    /* ── RESET BASE ─────────────────────────────── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--fuente);
+      font-size: 10.5pt;
+      color: #222;
+      background: #e8edf3;
+      padding: 20px;
+    }
+
+    .hoja {
+      background: #fff;
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px;
+      padding: 20mm 18mm 22mm 20mm;
+      box-shadow: 0 4px 24px rgba(0,0,0,.18);
+      page-break-after: always;
+    }
+
+    /* ── TIPOGRAFÍA ─────────────────────────────── */
+    h1 { font-size: 22pt; color: var(--color-primario); }
+    h2 { font-size: 13pt; color: var(--color-primario); margin-bottom: 10px; border-bottom: 2px solid var(--color-acento); padding-bottom: 4px;}
+    h3 { font-size: 10.5pt; color: var(--color-acento); text-transform: uppercase; letter-spacing: .5px; margin: 14px 0 6px; }
+
+    /* ── CARÁTULA ───────────────────────────────── */
+    .caratula {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      min-height: calc(297mm - 42mm);
+    }
+
+    .caratula-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid var(--color-primario);
+      padding-bottom: 16px;
+      margin-bottom: 40px;
+    }
+
+    .estudio-nombre { font-size: 12pt; font-weight: bold; color: var(--color-primario); }
+    .estudio-sub    { font-size: 9pt;  color: #666; }
+    .logo-area      { font-size: 28pt; color: var(--color-acento); font-weight: 900; }
+
+    .caratula-titulo {
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px 0;
+    }
+
+    .tipo-documento {
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--color-acento);
+      font-weight: 600;
+    }
+
+    .proyecto-nombre {
+      font-size: 28pt;
+      font-weight: 700;
+      color: var(--color-primario);
+      line-height: 1.1;
+    }
+
+    .proyecto-sub { font-size: 12pt; color: #555; margin-top: 8px; }
+
+    .caratula-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 30px;
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-borde);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-top: 40px;
+    }
+
+    .meta-item { font-size: 9.5pt; }
+    .meta-item .label { color: #888; font-size: 8pt; text-transform: uppercase; letter-spacing: .5px; display: block; }
+    .meta-item .valor { font-weight: 600; color: var(--color-primario); }
+
+    .caratula-footer {
+      border-top: 1px solid var(--color-borde);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 8.5pt;
+      color: #888;
+    }
+
+    /* ── TABLAS GENERALES ───────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin-bottom: 16px;
+    }
+
+    thead th {
+      background: var(--color-primario);
+      color: #fff;
+      padding: 6px 8px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    thead th.num { text-align: right; }
+
+    tbody tr:nth-child(even) { background: var(--color-bg-alt); }
+    tbody tr:hover { background: #dce8f5; }
+
+    td { padding: 5px 8px; border-bottom: 1px solid #e5eaf1; vertical-align: top; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    .subtotal-row td { font-weight: 700; background: #e0eaf5; border-top: 1.5px solid var(--color-acento); }
+    .total-row td {
+      font-weight: 700;
+      font-size: 11pt;
+      background: var(--color-primario);
+      color: #fff;
+      border-top: 2px solid #fff;
+    }
+
+    /* ── SECCIÓN PRESUPUESTO ────────────────────── */
+    .categoria-header td {
+      background: #d0dae6;
+      font-weight: 700;
+      font-size: 9pt;
+      color: var(--color-primario);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      padding: 5px 8px;
+    }
+
+    /* ── RESUMEN NUMÉRICO ───────────────────────── */
+    .resumen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .resumen-card {
+      border: 1px solid var(--color-borde);
+      border-radius: 6px;
+      padding: 12px 14px;
+      text-align: center;
+      background: var(--color-bg-alt);
+    }
+
+    .resumen-card .rc-label { font-size: 8pt; color: #777; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+    .resumen-card .rc-valor { font-size: 13pt; font-weight: 700; color: var(--color-primario); }
+
+    /* ── GANTT ──────────────────────────────────── */
+    .gantt-wrapper { overflow-x: auto; margin-bottom: 20px; }
+
+    .gantt-header {
+      display: flex;
+      margin-left: 200px;
+      margin-bottom: 4px;
+      gap: 0;
+    }
+
+    .gantt-week {
+      min-width: 30px;
+      flex: 1;
+      font-size: 7pt;
+      text-align: center;
+      color: #888;
+      border-left: 1px solid #ddd;
+      padding-bottom: 2px;
+    }
+
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      height: 22px;
+      margin-bottom: 3px;
+    }
+
+    .gantt-label {
+      width: 200px;
+      min-width: 200px;
+      font-size: 8.5pt;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-right: 8px;
+      color: #333;
+    }
+
+    .gantt-track {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      background: #f0f4fa;
+      border-radius: 2px;
+    }
+
+    .gantt-bar {
+      position: absolute;
+      height: 100%;
+      background: var(--color-acento);
+      border-radius: 3px;
+      opacity: .85;
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+      font-size: 7pt;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .gantt-bar.critica { background: var(--color-critico); }
+
+    .gantt-legend {
+      display: flex;
+      gap: 20px;
+      font-size: 8pt;
+      margin-top: 8px;
+      color: #555;
+    }
+
+    .gantt-legend-item { display: flex; align-items: center; gap: 6px; }
+    .gantt-legend-box { width: 16px; height: 12px; border-radius: 2px; }
+
+    /* ── PIE DE SECCIÓN ─────────────────────────── */
+    .section-footer {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--color-borde);
+      font-size: 7.5pt;
+      color: #aaa;
+      text-align: right;
+    }
+
+    .nota-aclaratoria {
+      background: #fffbe6;
+      border-left: 3px solid #e6b800;
+      font-size: 8.5pt;
+      color: #665500;
+      padding: 8px 12px;
+      margin: 12px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* ── HEADER DE PÁGINA INTERIOR ──────────────── */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--color-acento);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    .ph-titulo { font-size: 10pt; font-weight: 700; color: var(--color-primario); }
+    .ph-proyecto { font-size: 8.5pt; color: #666; }
+    .ph-logo { font-size: 14pt; color: var(--color-acento); font-weight: 900; }
+
+    /* ── PÁGINA PRINT ───────────────────────────── */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+        font-size: 9.5pt;
+      }
+
+      .hoja {
+        box-shadow: none;
+        margin: 0;
+        width: 100%;
+        padding: 16mm 16mm 18mm 18mm;
+        page-break-after: always;
+      }
+
+      .no-print { display: none !important; }
+
+      thead { display: table-header-group; }
+      tr { page-break-inside: avoid; }
+
+      .gantt-bar { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .categoria-header td, .subtotal-row td, .total-row td {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      thead th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+
+    /* ── BARRA DE ACCIONES (solo pantalla) ─────── */
+    .toolbar {
+      width: 210mm;
+      margin: 0 auto 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 10pt;
+      font-family: var(--fuente);
+    }
+
+    .btn-print {
+      background: var(--color-primario);
+      color: #fff;
+    }
+
+    .btn-print:hover { background: var(--color-acento); }
+  </style>
+</head>
+<body>
+
+<!-- TOOLBAR (solo en pantalla, no se imprime) -->
+<div class="toolbar no-print">
+  <button class="btn btn-print" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+</div>
+
+<!-- ════════════════ HOJA 1: CARÁTULA ════════════════ -->
+<div class="hoja">
+  <div class="caratula">
+    <div class="caratula-header">
+      <div>
+        <div class="estudio-nombre">Estudio de Arquitectura</div>
+        <div class="estudio-sub">Arquitectura + Construcción</div>
+      </div>
+      <div class="logo-area">APS</div>
+    </div>
+
+    <div class="caratula-titulo">
+      <div class="tipo-documento">Presupuesto</div>
+      <div class="proyecto-nombre">Casa Garcia</div>
+      <div class="proyecto-sub">Tucuman, Argentina</div>
+    </div>
+
+    <div class="caratula-meta">
+      <div class="meta-item">
+        <span class="label">Propietario / Comitente</span>
+        <span class="valor">Juan Garcia</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Superficie total</span>
+        <span class="valor">80.0 m²</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Fecha de emisión</span>
+        <span class="valor">15 de March de 2026</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Ref. expediente / obra</span>
+        <span class="valor">APS-20260315</span>
+      </div>
+      
+        <div class="meta-item">
+          <span class="label">Costo directo estimado</span>
+          <span class="valor">$ 31.167.928</span>
+        </div>
+        <div class="meta-item">
+          <span class="label">Costo por m²</span>
+          <span class="valor">$ 389.599 / m²</span>
+        </div>
+    </div>
+
+    <div class="caratula-footer">
+      <span>Generado por Arch Proposal Suite</span>
+      <span>15 de March de 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ HOJA 2+: PRESUPUESTO ════════════════ -->
+
+<div class="hoja">
+  <div class="page-header">
+    <div>
+      <div class="ph-titulo">PRESUPUESTO DE OBRA</div>
+      <div class="ph-proyecto">Casa Garcia — Tucuman, Argentina</div>
+    </div>
+    <div class="ph-logo">APS</div>
+  </div>
+
+  <div class="resumen-grid">
+    <div class="resumen-card">
+      <div class="rc-label">Total Materiales</div>
+      <div class="rc-valor">$ 16.267.287</div>
+    </div>
+    <div class="resumen-card">
+      <div class="rc-label">Total Mano de Obra</div>
+      <div class="rc-valor">$ 14.705.641</div>
+    </div>
+    <div class="resumen-card">
+      <div class="rc-label">Costo Directo Total</div>
+      <div class="rc-valor">$ 31.167.928</div>
+    </div>
+  </div>
+
+  <h2>Detalle por Rubro</h2>
+
+  <div class="nota-aclaratoria">
+    ⚠ Los precios de referencia son en <strong>Pesos Argentinos (ARS)</strong>
+    al momento de emisión. Incluye cargas sociales (125,21%) sobre la mano de obra.
+    Honorarios profesionales no incluidos.
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Rubro / Ítem</th>
+        <th class="num">Métricas</th>
+        <th class="num">Materiales</th>
+        <th class="num">Mano de Obra</th>
+        <th class="num">Equipos</th>
+        <th class="num">Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr class="categoria-header">
+          <td colspan="6">Trabajos Preparatorios</td>
+        </tr>
+        <tr>
+          <td>Nivelación y Replanteo</td>
+          <td class="num">m2: 80.0</td>
+          <td class="num">$ 0</td>
+          <td class="num">$ 82.877</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 82.877</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Trabajos Preparatorios</td>
+          <td class="num">$ 82.877</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Cimientos</td>
+        </tr>
+        <tr>
+          <td>Excavación</td>
+          <td class="num">m3: 20.0, mecanica: False</td>
+          <td class="num">$ 0</td>
+          <td class="num">$ 792.739</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 792.739</strong></td>
+        </tr>
+        <tr>
+          <td>Cimiento Corrido (Ciclópeo)</td>
+          <td class="num">m3: 10.4</td>
+          <td class="num">$ 901.773</td>
+          <td class="num">$ 536.360</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 1.438.133</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Cimientos</td>
+          <td class="num">$ 2.230.872</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Estructura</td>
+        </tr>
+        <tr>
+          <td>Columnas HA</td>
+          <td class="num">volumen_m3: 4.0, acero_kg: 376.0, encofrado_m2: 24.0, puntales: 0</td>
+          <td class="num">$ 2.007.677</td>
+          <td class="num">$ 886.427</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 2.894.104</strong></td>
+        </tr>
+        <tr>
+          <td>Vigas HA</td>
+          <td class="num">volumen_m3: 3.2, acero_kg: 280.0, encofrado_m2: 20.0, puntales: 0</td>
+          <td class="num">$ 1.540.020</td>
+          <td class="num">$ 703.376</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 2.243.396</strong></td>
+        </tr>
+        <tr>
+          <td>Losa Llena</td>
+          <td class="num">volumen_m3: 5.36, acero_kg: 464.0, encofrado_m2: 80.0, puntales: 26</td>
+          <td class="num">$ 2.876.533</td>
+          <td class="num">$ 1.927.653</td>
+          <td class="num">$ 195.000</td>
+          <td class="num"><strong>$ 4.999.187</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Estructura</td>
+          <td class="num">$ 10.136.686</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Cerramientos</td>
+        </tr>
+        <tr>
+          <td>Ladrillo Hueco 18cm</td>
+          <td class="num">m2: 160.0</td>
+          <td class="num">$ 2.743.647</td>
+          <td class="num">$ 2.071.932</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 4.815.579</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Cerramientos</td>
+          <td class="num">$ 4.815.579</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Cubierta y Aislaciones</td>
+        </tr>
+        <tr>
+          <td>Capa Aisladora Horizontal</td>
+          <td class="num">ml: 56.0</td>
+          <td class="num">$ 34.095</td>
+          <td class="num">$ 151.341</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 185.436</strong></td>
+        </tr>
+        <tr>
+          <td>Cubierta de Chapa + Aislación</td>
+          <td class="num">m2: 88.0</td>
+          <td class="num">$ 977.645</td>
+          <td class="num">$ 634.191</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 1.611.836</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Cubierta y Aislaciones</td>
+          <td class="num">$ 1.797.273</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Revoques y Morteros</td>
+        </tr>
+        <tr>
+          <td>Revoque Grueso (e=1.5cm)</td>
+          <td class="num">m2: 280.0, bolsas_plasticor: 78</td>
+          <td class="num">$ 1.345.822</td>
+          <td class="num">$ 1.765.646</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 3.111.469</strong></td>
+        </tr>
+        <tr>
+          <td>Revoque Fino</td>
+          <td class="num">m2: 280.0, bolsas_plasticor: 31</td>
+          <td class="num">$ 538.329</td>
+          <td class="num">$ 1.261.176</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 1.799.505</strong></td>
+        </tr>
+        <tr>
+          <td>Carpeta Niveladora</td>
+          <td class="num">m2: 80.0</td>
+          <td class="num">$ 307.617</td>
+          <td class="num">$ 288.269</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 595.885</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Revoques y Morteros</td>
+          <td class="num">$ 5.506.859</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Contrapisos</td>
+        </tr>
+        <tr>
+          <td>Contrapiso (e=8cm)</td>
+          <td class="num">m2: 80.0, m3: 6.4</td>
+          <td class="num">$ 757.496</td>
+          <td class="num">$ 165.034</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 922.530</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Contrapisos</td>
+          <td class="num">$ 922.530</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Pisos y Revestimientos</td>
+        </tr>
+        <tr>
+          <td>Pisos Cerámicos (recto)</td>
+          <td class="num">m2: 72.0</td>
+          <td class="num">$ 1.074.830</td>
+          <td class="num">$ 648.605</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 1.723.435</strong></td>
+        </tr>
+        <tr>
+          <td>Zócalos</td>
+          <td class="num">ml: 120.0</td>
+          <td class="num">$ 196.759</td>
+          <td class="num">$ 277.008</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 473.767</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Pisos y Revestimientos</td>
+          <td class="num">$ 2.197.201</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Cielorrasos</td>
+        </tr>
+        <tr>
+          <td>Cielorraso Aplicado (Yeso)</td>
+          <td class="num">m2: 68.0</td>
+          <td class="num">$ 106.577</td>
+          <td class="num">$ 490.057</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 596.634</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Cielorrasos</td>
+          <td class="num">$ 596.634</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Instalaciones</td>
+        </tr>
+        <tr>
+          <td>Instalación Eléctrica</td>
+          <td class="num">bocas: 36</td>
+          <td class="num">$ 129.240</td>
+          <td class="num">$ 506.722</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 635.962</strong></td>
+        </tr>
+        <tr>
+          <td>Instalación Sanitaria</td>
+          <td class="num">bocas: 5</td>
+          <td class="num">$ 36.500</td>
+          <td class="num">$ 115.420</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 151.920</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Instalaciones</td>
+          <td class="num">$ 787.883</td>
+        </tr>
+        <tr class="categoria-header">
+          <td colspan="6">Pinturas</td>
+        </tr>
+        <tr>
+          <td>Pintura Látex Interior (2 manos)</td>
+          <td class="num">m2: 440.0</td>
+          <td class="num">$ 582.478</td>
+          <td class="num">$ 1.015.697</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 1.598.175</strong></td>
+        </tr>
+        <tr>
+          <td>Pintura Exterior Texturada</td>
+          <td class="num">m2: 120.0</td>
+          <td class="num">$ 110.250</td>
+          <td class="num">$ 385.109</td>
+          <td class="num">$ 0</td>
+          <td class="num"><strong>$ 495.359</strong></td>
+        </tr>
+        <tr class="subtotal-row">
+          <td colspan="5">Subtotal — Pinturas</td>
+          <td class="num">$ 2.093.534</td>
+        </tr>
+      <tr class="total-row">
+        <td colspan="4"><strong>COSTO DIRECTO TOTAL</strong></td>
+        <td class="num" colspan="2"><strong>$ 31.167.928</strong></td>
+      </tr>
+      <tr>
+        <td colspan="4" style="color:#555; font-size:8.5pt;">Costo por m² construido (80.0 m²)</td>
+        <td class="num" colspan="2"><strong>$ 389.599 / m²</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-footer">
+    Presupuesto paramétrico estimativo — Arch Proposal Suite — 15/03/2026
+  </div>
+</div>
+
+<!-- ════════════════ HOJA +: CRONOGRAMA ════════════════ -->
+
+
+<!-- ════════════════ HOJA +: CÓMPUTO MATERIALES ═══════════ -->
+
+
+</body>
+</html>

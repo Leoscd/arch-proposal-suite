@@ -1,0 +1,30 @@
+{
+    "gastos": [
+        {
+            "emisor": "CORRALON SAN LORENZO",
+            "fecha": "2026-03-15",
+            "tiene_iva": true,
+            "materiales": [
+                {
+                    "nombre": "Cemento Loma Negra",
+                    "cantidad": 10,
+                    "unidad": "bolsa",
+                    "precio_unitario": 8500.0,
+                    "subtotal": 85000.0
+                },
+                {
+                    "nombre": "Hierro 12mm",
+                    "cantidad": 2,
+                    "unidad": "barra",
+                    "precio_unitario": 18000.0,
+                    "subtotal": 36000.0
+                }
+            ],
+            "subtotal_neto": 100000.0,
+            "total_iva": 21000.0,
+            "total_factura": 121000.0,
+            "id": "TICK-20260315120000",
+            "fecha_carga": "2026-03-15 12:00:00"
+        }
+    ]
+}

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{TITULO_REPORTE}}</title>
+  <style>
+    /* ── VARIABLES ─────────────────────────────── */
+    :root {
+      --color-primario:  #1a2f4e;
+      --color-acento:    #2d6a9f;
+      --color-critico:   #c0392b;
+      --color-ok:        #27ae60;
+      --color-bg-alt:    #f4f7fb;
+      --color-borde:     #d0dae6;
+      --fuente:          'Segoe UI', Arial, sans-serif;
+    }
+
+    /* ── RESET BASE ─────────────────────────────── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--fuente);
+      font-size: 10.5pt;
+      color: #222;
+      background: #e8edf3;
+      padding: 20px;
+    }
+
+    .hoja {
+      background: #fff;
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px;
+      padding: 20mm 18mm 22mm 20mm;
+      box-shadow: 0 4px 24px rgba(0,0,0,.18);
+      page-break-after: always;
+    }
+
+    /* ── TIPOGRAFÍA ─────────────────────────────── */
+    h1 { font-size: 22pt; color: var(--color-primario); }
+    h2 { font-size: 13pt; color: var(--color-primario); margin-bottom: 10px; border-bottom: 2px solid var(--color-acento); padding-bottom: 4px;}
+    h3 { font-size: 10.5pt; color: var(--color-acento); text-transform: uppercase; letter-spacing: .5px; margin: 14px 0 6px; }
+
+    /* ── CARÁTULA ───────────────────────────────── */
+    .caratula {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      min-height: calc(297mm - 42mm);
+    }
+
+    .caratula-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid var(--color-primario);
+      padding-bottom: 16px;
+      margin-bottom: 40px;
+    }
+
+    .estudio-nombre { font-size: 12pt; font-weight: bold; color: var(--color-primario); }
+    .estudio-sub    { font-size: 9pt;  color: #666; }
+    .logo-area      { font-size: 28pt; color: var(--color-acento); font-weight: 900; }
+
+    .caratula-titulo {
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      padding: 40px 0;
+    }
+
+    .tipo-documento {
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--color-acento);
+      font-weight: 600;
+    }
+
+    .proyecto-nombre {
+      font-size: 28pt;
+      font-weight: 700;
+      color: var(--color-primario);
+      line-height: 1.1;
+    }
+
+    .proyecto-sub { font-size: 12pt; color: #555; margin-top: 8px; }
+
+    .caratula-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 30px;
+      background: var(--color-bg-alt);
+      border: 1px solid var(--color-borde);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-top: 40px;
+    }
+
+    .meta-item { font-size: 9.5pt; }
+    .meta-item .label { color: #888; font-size: 8pt; text-transform: uppercase; letter-spacing: .5px; display: block; }
+    .meta-item .valor { font-weight: 600; color: var(--color-primario); }
+
+    .caratula-footer {
+      border-top: 1px solid var(--color-borde);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 8.5pt;
+      color: #888;
+    }
+
+    /* ── TABLAS GENERALES ───────────────────────── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin-bottom: 16px;
+    }
+
+    thead th {
+      background: var(--color-primario);
+      color: #fff;
+      padding: 6px 8px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    thead th.num { text-align: right; }
+
+    tbody tr:nth-child(even) { background: var(--color-bg-alt); }
+    tbody tr:hover { background: #dce8f5; }
+
+    td { padding: 5px 8px; border-bottom: 1px solid #e5eaf1; vertical-align: top; }
+    td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    .subtotal-row td { font-weight: 700; background: #e0eaf5; border-top: 1.5px solid var(--color-acento); }
+    .total-row td {
+      font-weight: 700;
+      font-size: 11pt;
+      background: var(--color-primario);
+      color: #fff;
+      border-top: 2px solid #fff;
+    }
+
+    /* ── SECCIÓN PRESUPUESTO ────────────────────── */
+    .categoria-header td {
+      background: #d0dae6;
+      font-weight: 700;
+      font-size: 9pt;
+      color: var(--color-primario);
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      padding: 5px 8px;
+    }
+
+    /* ── RESUMEN NUMÉRICO ───────────────────────── */
+    .resumen-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .resumen-card {
+      border: 1px solid var(--color-borde);
+      border-radius: 6px;
+      padding: 12px 14px;
+      text-align: center;
+      background: var(--color-bg-alt);
+    }
+
+    .resumen-card .rc-label { font-size: 8pt; color: #777; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; }
+    .resumen-card .rc-valor { font-size: 13pt; font-weight: 700; color: var(--color-primario); }
+
+    /* ── GANTT ──────────────────────────────────── */
+    .gantt-wrapper { overflow-x: auto; margin-bottom: 20px; }
+
+    .gantt-header {
+      display: flex;
+      margin-left: 200px;
+      margin-bottom: 4px;
+      gap: 0;
+    }
+
+    .gantt-week {
+      min-width: 30px;
+      flex: 1;
+      font-size: 7pt;
+      text-align: center;
+      color: #888;
+      border-left: 1px solid #ddd;
+      padding-bottom: 2px;
+    }
+
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      height: 22px;
+      margin-bottom: 3px;
+    }
+
+    .gantt-label {
+      width: 200px;
+      min-width: 200px;
+      font-size: 8.5pt;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding-right: 8px;
+      color: #333;
+    }
+
+    .gantt-track {
+      flex: 1;
+      height: 100%;
+      position: relative;
+      background: #f0f4fa;
+      border-radius: 2px;
+    }
+
+    .gantt-bar {
+      position: absolute;
+      height: 100%;
+      background: var(--color-acento);
+      border-radius: 3px;
+      opacity: .85;
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
+      font-size: 7pt;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .gantt-bar.critica { background: var(--color-critico); }
+
+    .gantt-legend {
+      display: flex;
+      gap: 20px;
+      font-size: 8pt;
+      margin-top: 8px;
+      color: #555;
+    }
+
+    .gantt-legend-item { display: flex; align-items: center; gap: 6px; }
+    .gantt-legend-box { width: 16px; height: 12px; border-radius: 2px; }
+
+    /* ── PIE DE SECCIÓN ─────────────────────────── */
+    .section-footer {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--color-borde);
+      font-size: 7.5pt;
+      color: #aaa;
+      text-align: right;
+    }
+
+    .nota-aclaratoria {
+      background: #fffbe6;
+      border-left: 3px solid #e6b800;
+      font-size: 8.5pt;
+      color: #665500;
+      padding: 8px 12px;
+      margin: 12px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* ── HEADER DE PÁGINA INTERIOR ──────────────── */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--color-acento);
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    .ph-titulo { font-size: 10pt; font-weight: 700; color: var(--color-primario); }
+    .ph-proyecto { font-size: 8.5pt; color: #666; }
+    .ph-logo { font-size: 14pt; color: var(--color-acento); font-weight: 900; }
+
+    /* ── PÁGINA PRINT ───────────────────────────── */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+        font-size: 9.5pt;
+      }
+
+      .hoja {
+        box-shadow: none;
+        margin: 0;
+        width: 100%;
+        padding: 16mm 16mm 18mm 18mm;
+        page-break-after: always;
+      }
+
+      .no-print { display: none !important; }
+
+      thead { display: table-header-group; }
+      tr { page-break-inside: avoid; }
+
+      .gantt-bar { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .categoria-header td, .subtotal-row td, .total-row td {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+      thead th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+
+    /* ── BARRA DE ACCIONES (solo pantalla) ─────── */
+    .toolbar {
+      width: 210mm;
+      margin: 0 auto 16px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 10pt;
+      font-family: var(--fuente);
+    }
+
+    .btn-print {
+      background: var(--color-primario);
+      color: #fff;
+    }
+
+    .btn-print:hover { background: var(--color-acento); }
+  </style>
+</head>
+<body>
+
+<!-- TOOLBAR (solo en pantalla, no se imprime) -->
+<div class="toolbar no-print">
+  <button class="btn btn-print" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+</div>
+
+<!-- ════════════════ HOJA 1: CARÁTULA ════════════════ -->
+<div class="hoja">
+  <div class="caratula">
+    <div class="caratula-header">
+      <div>
+        <div class="estudio-nombre">{{ESTUDIO_NOMBRE}}</div>
+        <div class="estudio-sub">{{ESTUDIO_SUBTITULO}}</div>
+      </div>
+      <div class="logo-area">APS</div>
+    </div>
+
+    <div class="caratula-titulo">
+      <div class="tipo-documento">{{TIPO_DOCUMENTO}}</div>
+      <div class="proyecto-nombre">{{PROYECTO_NOMBRE}}</div>
+      <div class="proyecto-sub">{{PROYECTO_UBICACION}}</div>
+    </div>
+
+    <div class="caratula-meta">
+      <div class="meta-item">
+        <span class="label">Propietario / Comitente</span>
+        <span class="valor">{{COMITENTE}}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Superficie total</span>
+        <span class="valor">{{SUPERFICIE}} m²</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Fecha de emisión</span>
+        <span class="valor">{{FECHA_EMISION}}</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Ref. expediente / obra</span>
+        <span class="valor">{{REF_EXPEDIENTE}}</span>
+      </div>
+      {{CARATULA_EXTRA_META}}
+    </div>
+
+    <div class="caratula-footer">
+      <span>Generado por Arch Proposal Suite</span>
+      <span>{{FECHA_EMISION}}</span>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ HOJA 2+: PRESUPUESTO ════════════════ -->
+{{SECCION_PRESUPUESTO}}
+
+<!-- ════════════════ HOJA +: CRONOGRAMA ════════════════ -->
+{{SECCION_CRONOGRAMA}}
+
+<!-- ════════════════ HOJA +: CÓMPUTO MATERIALES ═══════════ -->
+{{SECCION_COMPUTO}}
+
+</body>
+</html>

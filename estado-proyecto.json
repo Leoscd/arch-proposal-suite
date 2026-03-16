@@ -1,0 +1,32 @@
+{
+  "metadatos": {
+    "proyecto_nombre": "Pendiente de definicion",
+    "fecha_inicio_obra": "YYYY-MM-DD",
+    "personal_sugerido": {
+      "oficiales": 2,
+      "ayudantes": 2
+    }
+  },
+  "metricas_base": {
+    "superficies": {
+      "cubierta_m2": 0.0,
+      "semicubierta_m2": 0.0,
+      "descubierta_m2": 0.0
+    },
+    "cantidades_estimadas_por_foto_o_plano": {
+      "excavacion_m3": 0.0,
+      "cimiento_m3": 0.0,
+      "columna_viga_losa_m3": 0.0,
+      "muro_ladrillo_m2": 0.0,
+      "contrapiso_carpeta_m2": 0.0,
+      "revoque_grueso_m2": 0.0,
+      "revoque_fino_m2": 0.0,
+      "cubierta_chapa_m2": 0.0,
+      "piso_ceramico_m2": 0.0,
+      "pintura_interior_m2": 0.0
+    }
+  },
+  "presupuesto_validado": {},
+  "gastos_reales": [],
+  "auditorias_completadas": []
+}

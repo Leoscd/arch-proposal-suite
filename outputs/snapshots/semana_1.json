@@ -1,0 +1,34 @@
+{
+  "semana": 1,
+  "fecha_cierre": "2026-03-15",
+  "resumen_financiero": {
+    "gastado_semana_ars": 121000.0,
+    "gastado_acumulado_ars": 121000.0,
+    "presupuestado_semana_ars": 1500000.0,
+    "desvio_financiero_pct": -91.9
+  },
+  "resumen_tiempo": {
+    "avance_programado_pct": 0.0,
+    "avance_real_pct": 0.0,
+    "desvio_dias": 0
+  },
+  "semaforo": "VERDE",
+  "tareas_completadas": [],
+  "tareas_proxima_semana": [
+    "Nivelación y Replanteo",
+    "Excavación"
+  ],
+  "tickets_semana": [
+    {
+      "id": "TICK-20260315120000",
+      "proveedor": "CORRALON SAN LORENZO",
+      "fecha": "2026-03-15",
+      "total_ars": 121000.0,
+      "items": [
+        {"descripcion": "Cemento Loma Negra", "cantidad": 10, "unidad": "bolsa", "precio_unit": 8500.0},
+        {"descripcion": "Hierro 12mm", "cantidad": 2, "unidad": "barra", "precio_unit": 18000.0}
+      ]
+    }
+  ],
+  "notas_director": "Primer ticket cargado. Inicio de obra."
+}

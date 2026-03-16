@@ -1,0 +1,21 @@
+﻿Tarea,Duración (días hábiles),Inicio temprano,Fin temprano,Inicio tardío,Fin tardío,Holgura (días),¿Crítica?,Predecesores
+Nivelación y Replanteo,1.0,2025-04-01,2025-04-02,2025-04-15,2025-04-16,14,no,—
+Excavación,2.8,2025-04-03,2025-04-07,2025-04-16,2025-04-18,13,no,replanteo
+Cimiento Corrido (Ciclópeo),1.9,2025-04-08,2025-04-09,2025-04-18,2025-04-21,10,no,excavacion
+Columnas HA,3.1,2025-04-10,2025-04-15,2025-04-21,2025-04-24,11,no,cimiento
+Vigas HA,2.4,2025-04-16,2025-04-18,2025-04-24,2025-04-28,8,no,columna
+Losa Llena,6.7,2025-04-21,2025-04-29,2025-04-29,2025-05-07,8,no,viga
+Ladrillo Hueco 18cm,7.2,2025-04-21,2025-04-30,2025-04-28,2025-05-07,7,no,columna | viga
+Capa Aisladora Horizontal,1.0,2025-05-01,2025-05-02,2025-05-28,2025-05-29,27,no,cimiento | ladrillo
+Cubierta de Chapa + Aislación,2.2,2025-05-01,2025-05-05,2025-05-07,2025-05-09,6,no,losa | ladrillo | steel frame
+Revoque Grueso (e=1.5cm),6.1,2025-05-06,2025-05-14,2025-05-09,2025-05-19,3,no,ladrillo | steel frame | cubierta
+Revoque Fino,4.4,2025-05-15,2025-05-21,2025-05-19,2025-05-23,4,no,revoque grueso
+Contrapiso (e=8cm),1.0,2025-05-01,2025-05-02,2025-05-22,2025-05-23,21,no,cimiento | ladrillo
+Carpeta Niveladora,1.0,2025-05-05,2025-05-06,2025-05-23,2025-05-26,18,no,contrapiso
+Pisos Cerámicos (recto),2.2,2025-05-15,2025-05-19,2025-05-26,2025-05-28,11,no,carpeta | revoque grueso
+Zócalos,1.0,2025-05-20,2025-05-21,2025-05-28,2025-05-29,8,no,pisos | ceramico
+Cielorraso Aplicado (Yeso),1.7,2025-05-22,2025-05-23,2025-05-23,2025-05-26,1,no,revoque fino
+Instalación Eléctrica,1.8,2025-05-01,2025-05-02,2025-05-28,2025-05-29,27,no,ladrillo | steel frame
+Instalación Sanitaria,1.0,2025-05-05,2025-05-06,2025-05-28,2025-05-29,23,no,ladrillo | contrapiso
+Pintura Látex Interior (2 manos),3.5,2025-05-26,2025-05-29,2025-05-26,2025-05-29,0,SÍ,revoque fino | cielorraso
+Pintura Exterior Texturada,1.3,2025-05-26,2025-05-27,2025-05-28,2025-05-29,2,no,revoque fino | cielorraso

@@ -1,0 +1,149 @@
+[
+  {
+    "id": "01_TRABAJOS_PREPARATORIOS",
+    "nombre": "Trabajos Preparatorios",
+    "items": [
+      { "nombre": "Limpieza del terreno", "unidad": "M2" },
+      { "nombre": "Nivelación y Replanteo", "unidad": "M2" },
+      { "nombre": "Cerco de obra y Obrador", "unidad": "GLB" }
+    ]
+  },
+  {
+    "id": "02_CIMIENTOS_Y_FUNDACIONES",
+    "nombre": "Cimientos y Fundaciones",
+    "items": [
+      { "nombre": "Excavación manual", "unidad": "M3" },
+      { "nombre": "Excavación mecánica", "unidad": "M3" },
+      { "nombre": "Cimiento Corrido (HA)", "unidad": "M3" },
+      { "nombre": "Cimiento de Hormigón con Piedra Bola (Ciclópeo)", "unidad": "M3" },
+      { "nombre": "Vigas de Apeo", "unidad": "M3" },
+      { "nombre": "Muros de Contención", "unidad": "M2_O_M3" },
+      { "nombre": "Bases Aisladas", "unidad": "M3" }
+    ]
+  },
+  {
+    "id": "03_ESTRUCTURAS",
+    "nombre": "Estructuras Resistentes",
+    "reglas_especiales": {
+      "acero_torsionado": "Se requiere consultar tabla de ingeniero. Lógica: m.l. totales de barras longitudinales y estribos divididos por 12m para obtener CANTIDAD DE BARRAS de compra.",
+      "encofrado": "Se calcula siempre en M2."
+    },
+    "items": [
+      { "nombre": "Columnas de Hormigón Armado", "unidad": "M3", "sub_calculos": ["Acero_Barras", "Encofrado_Madera_M2", "Hormigon_M3"] },
+      { "nombre": "Vigas de Hormigón Armado", "unidad": "M3", "sub_calculos": ["Acero_Barras", "Encofrado_Madera_M2", "Puntales_UN", "Hormigon_M3"] },
+      { "nombre": "Encadenados Horizontales / Dinteles", "unidad": "ML_O_M3", "sub_calculos": ["Acero_Barras", "Encofrado_Madera_M2", "Hormigon_M3"] },
+      { "nombre": "Encadenados Verticales / Tensores", "unidad": "ML_O_M3", "sub_calculos": ["Acero_Barras", "Encofrado_Madera_M2", "Hormigon_M3"] },
+      { "nombre": "Losa Llena", "unidad": "M3", "sub_calculos": ["Acero_Barras_Malla", "Encofrado_Madera_M2", "Puntales_UN", "Hormigon_M3"] },
+      { "nombre": "Losa Alivianada (Casetones EPS)", "unidad": "M2", "sub_calculos": ["Casetones_UN", "Acero_Barras", "Hormigon_M3", "Apuntalamiento_M2"] },
+      { "nombre": "Losa Nervurada (Viguetas y Ladrillos cerámicos)", "unidad": "M2", "sub_calculos": ["Viguetas_ML", "Ladrillos_UN", "Malla_Sima_M2", "Hormigon_Capa_M3"] },
+      { "nombre": "Losa de Filigrana", "unidad": "M2", "sub_calculos": ["Prelosas_M2", "Acero_Adicional_Barras", "Hormigon_Capa_M3"] },
+      { "nombre": "Estructura Metálica (Perfiles C Plegados)", "unidad": "UN" },
+      { "nombre": "Estructura de Madera", "unidad": "PIE2_O_ML" }
+    ]
+  },
+  {
+    "id": "04_CERRAMIENTOS",
+    "nombre": "Cerramientos",
+    "items": [
+      { "nombre": "Ladrillo Común (15cm o 30cm)", "unidad": "M2" },
+      { "nombre": "Ladrillo Hueco (Cerramientos 18cm, Tabiques 12cm)", "unidad": "M2" },
+      { "nombre": "Bloques HCCA (Retak, Brimax)", "unidad": "M2" },
+      { "nombre": "Construcción en Seco (Steel Frame)", "unidad": "M2", "sub_calculos": ["Perfiles_PGC_PGU_ML", "Placas_M2", "Aislacion_M2"] },
+      { "nombre": "Construcción en Seco (Wood Frame)", "unidad": "M2", "sub_calculos": ["Montantes_ML", "Placas_OSB_M2", "Aislacion_M2"] },
+      { "nombre": "Hormigón Proyectado sobre EPS", "unidad": "M2", "sub_calculos": ["Paneles_EPS_M2", "Malla_Acero_M2", "Mortero_M3"] }
+    ]
+  },
+  {
+    "id": "05_AISLACIONES",
+    "nombre": "Aislaciones",
+    "items": [
+      { "nombre": "Capa Aisladora Horizontal (Cajón)", "unidad": "ML_O_M2" },
+      { "nombre": "Capa Aisladora Vertical", "unidad": "M2" },
+      { "nombre": "Aislación Térmica / Barrera de Vapor", "unidad": "M2" }
+    ]
+  },
+  {
+    "id": "06_CUBIERTAS",
+    "nombre": "Cubiertas de Techos",
+    "reglas_especiales": {
+      "estructura_soporte": "Debe definirse antes si el soporte será perfiles metálicos, madera o sobre losa."
+    },
+    "items": [
+      { "nombre": "Cubierta de Chapa (Sobre estructura a definir)", "unidad": "M2", "sub_calculos": ["Chapa_M2", "Aislacion_M2", "Fijaciones"] },
+      { "nombre": "Cubierta de Tejas Francesas/Coloniales", "unidad": "M2" },
+      { "nombre": "Cubierta Plana (Membrana asfáltica transitable/intransitable)", "unidad": "M2" }
+    ]
+  },
+  {
+    "id": "07_REVOQUES",
+    "nombre": "Revoques",
+    "items": [
+      { "nombre": "Revoque Grueso (Interior y Exterior)", "unidad": "M2" },
+      { "nombre": "Revoque Fino (Interior y Exterior)", "unidad": "M2" },
+      { "nombre": "Azotado Hidrófugo", "unidad": "M2" }
+    ]
+  },
+  {
+    "id": "08_CONTRAPISOS_CARPETAS",
+    "nombre": "Contrapisos y Carpetas",
+    "items": [
+      { "nombre": "Contrapiso H° Pobre", "unidad": "M2_O_M3" },
+      { "nombre": "Carpeta Niveladora", "unidad": "M2" }
+    ]
+  },
+  {
+    "id": "09_PISOS",
+    "nombre": "Pisos, Zócalos y Revestimientos",
+    "items": [
+      { "nombre": "Pisos Cerámicos / Porcelanatos / Madera", "unidad": "M2" },
+      { "nombre": "Revestimiento Cerámico (Baños/Cocinas)", "unidad": "M2" },
+      { "nombre": "Piedra / Muretes exteriores", "unidad": "M2" },
+      { "nombre": "Zócalos", "unidad": "ML" }
+    ]
+  },
+  {
+    "id": "10_CIELORRASOS",
+    "nombre": "Cielorrasos",
+    "items": [
+      { "nombre": "Cielorraso Aplicado al Yeso", "unidad": "M2" },
+      { "nombre": "Cielorraso Suspendido (Placas de Yeso/Durlock)", "unidad": "M2" }
+    ]
+  },
+  {
+    "id": "11_INSTALACIONES",
+    "nombre": "Instalaciones",
+    "items": [
+      { "nombre": "Instalación Sanitaria (Cloacal y Pluvial)", "unidad": "GLB_O_BOCA" },
+      { "nombre": "Instalación de Agua (Fría/Caliente)", "unidad": "BOCA" },
+      { "nombre": "Instalación de Gas", "unidad": "BOCA_O_ML" },
+      { "nombre": "Instalación Eléctrica (Cañería, Cajas, Cableado)", "unidad": "BOCA" },
+      { "nombre": "Artefactos y Griferías", "unidad": "UN" }
+    ]
+  },
+  {
+    "id": "12_CARPINTERIAS",
+    "nombre": "Carpinterías y Herrería",
+    "items": [
+      { "nombre": "Puertas", "unidad": "UN" },
+      { "nombre": "Ventanas (Aluminio/PVC)", "unidad": "UN_O_M2" },
+      { "nombre": "Herrería (Barandas, rejas)", "unidad": "ML_O_GLB" },
+      { "nombre": "Mobiliario Fijo (Placares, Bajomesadas)", "unidad": "ML" }
+    ]
+  },
+  {
+    "id": "13_PINTURAS",
+    "nombre": "Pinturas y Tratamientos",
+    "items": [
+      { "nombre": "Pintura Látex Interior", "unidad": "M2" },
+      { "nombre": "Pintura Exterior / Texturados", "unidad": "M2" },
+      { "nombre": "Esmalte Sintético (Herrería/Carpintería)", "unidad": "M2" }
+    ]
+  },
+  {
+    "id": "14_LIMPIEZA",
+    "nombre": "Terminación y Limpieza Final",
+    "items": [
+      { "nombre": "Limpieza Final de Obra", "unidad": "M2_O_GLB" }
+    ]
+  }
+]

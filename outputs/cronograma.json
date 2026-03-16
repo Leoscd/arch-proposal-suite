@@ -1,0 +1,359 @@
+{
+  "configuracion": {
+    "fecha_inicio": "2025-04-01",
+    "personal_oficial": 2,
+    "personal_ayudante": 2,
+    "jornada_hs": 8.0
+  },
+  "duracion_total_dias": 42,
+  "fecha_fin_estimada": "2025-05-29",
+  "camino_critico": [
+    "Pintura Látex Interior (2 manos)"
+  ],
+  "tareas": [
+    {
+      "elemento": "Nivelación y Replanteo",
+      "duracion_dias": 1.0,
+      "inicio": "2025-04-01",
+      "fin": "2025-04-02",
+      "inicio_tardio": "2025-04-15",
+      "fin_tardio": "2025-04-16",
+      "holgura_dias": 14,
+      "critica": false,
+      "predecesores": [],
+      "metricas": {
+        "m2": 80.0
+      }
+    },
+    {
+      "elemento": "Excavación",
+      "duracion_dias": 2.8,
+      "inicio": "2025-04-03",
+      "fin": "2025-04-07",
+      "inicio_tardio": "2025-04-16",
+      "fin_tardio": "2025-04-18",
+      "holgura_dias": 13,
+      "critica": false,
+      "predecesores": [
+        "replanteo"
+      ],
+      "metricas": {
+        "m3": 20.0,
+        "mecanica": false
+      }
+    },
+    {
+      "elemento": "Cimiento Corrido (Ciclópeo)",
+      "duracion_dias": 1.9,
+      "inicio": "2025-04-08",
+      "fin": "2025-04-09",
+      "inicio_tardio": "2025-04-18",
+      "fin_tardio": "2025-04-21",
+      "holgura_dias": 10,
+      "critica": false,
+      "predecesores": [
+        "excavacion"
+      ],
+      "metricas": {
+        "m3": 10.4
+      }
+    },
+    {
+      "elemento": "Columnas HA",
+      "duracion_dias": 3.1,
+      "inicio": "2025-04-10",
+      "fin": "2025-04-15",
+      "inicio_tardio": "2025-04-21",
+      "fin_tardio": "2025-04-24",
+      "holgura_dias": 11,
+      "critica": false,
+      "predecesores": [
+        "cimiento"
+      ],
+      "metricas": {
+        "volumen_m3": 4.0,
+        "acero_kg": 376.0,
+        "encofrado_m2": 24.0,
+        "puntales": 0
+      }
+    },
+    {
+      "elemento": "Vigas HA",
+      "duracion_dias": 2.4,
+      "inicio": "2025-04-16",
+      "fin": "2025-04-18",
+      "inicio_tardio": "2025-04-24",
+      "fin_tardio": "2025-04-28",
+      "holgura_dias": 8,
+      "critica": false,
+      "predecesores": [
+        "columna"
+      ],
+      "metricas": {
+        "volumen_m3": 3.2,
+        "acero_kg": 280.0,
+        "encofrado_m2": 20.0,
+        "puntales": 0
+      }
+    },
+    {
+      "elemento": "Losa Llena",
+      "duracion_dias": 6.7,
+      "inicio": "2025-04-21",
+      "fin": "2025-04-29",
+      "inicio_tardio": "2025-04-29",
+      "fin_tardio": "2025-05-07",
+      "holgura_dias": 8,
+      "critica": false,
+      "predecesores": [
+        "viga"
+      ],
+      "metricas": {
+        "volumen_m3": 5.36,
+        "acero_kg": 464.0,
+        "encofrado_m2": 80.0,
+        "puntales": 26
+      }
+    },
+    {
+      "elemento": "Ladrillo Hueco 18cm",
+      "duracion_dias": 7.2,
+      "inicio": "2025-04-21",
+      "fin": "2025-04-30",
+      "inicio_tardio": "2025-04-28",
+      "fin_tardio": "2025-05-07",
+      "holgura_dias": 7,
+      "critica": false,
+      "predecesores": [
+        "columna",
+        "viga"
+      ],
+      "metricas": {
+        "m2": 160.0
+      }
+    },
+    {
+      "elemento": "Capa Aisladora Horizontal",
+      "duracion_dias": 1.0,
+      "inicio": "2025-05-01",
+      "fin": "2025-05-02",
+      "inicio_tardio": "2025-05-28",
+      "fin_tardio": "2025-05-29",
+      "holgura_dias": 27,
+      "critica": false,
+      "predecesores": [
+        "cimiento",
+        "ladrillo"
+      ],
+      "metricas": {
+        "ml": 56.0
+      }
+    },
+    {
+      "elemento": "Cubierta de Chapa + Aislación",
+      "duracion_dias": 2.2,
+      "inicio": "2025-05-01",
+      "fin": "2025-05-05",
+      "inicio_tardio": "2025-05-07",
+      "fin_tardio": "2025-05-09",
+      "holgura_dias": 6,
+      "critica": false,
+      "predecesores": [
+        "losa",
+        "ladrillo",
+        "steel frame"
+      ],
+      "metricas": {
+        "m2": 88.0
+      }
+    },
+    {
+      "elemento": "Revoque Grueso (e=1.5cm)",
+      "duracion_dias": 6.1,
+      "inicio": "2025-05-06",
+      "fin": "2025-05-14",
+      "inicio_tardio": "2025-05-09",
+      "fin_tardio": "2025-05-19",
+      "holgura_dias": 3,
+      "critica": false,
+      "predecesores": [
+        "ladrillo",
+        "steel frame",
+        "cubierta"
+      ],
+      "metricas": {
+        "m2": 280.0,
+        "bolsas_plasticor": 78
+      }
+    },
+    {
+      "elemento": "Revoque Fino",
+      "duracion_dias": 4.4,
+      "inicio": "2025-05-15",
+      "fin": "2025-05-21",
+      "inicio_tardio": "2025-05-19",
+      "fin_tardio": "2025-05-23",
+      "holgura_dias": 4,
+      "critica": false,
+      "predecesores": [
+        "revoque grueso"
+      ],
+      "metricas": {
+        "m2": 280.0,
+        "bolsas_plasticor": 31
+      }
+    },
+    {
+      "elemento": "Contrapiso (e=8cm)",
+      "duracion_dias": 1.0,
+      "inicio": "2025-05-01",
+      "fin": "2025-05-02",
+      "inicio_tardio": "2025-05-22",
+      "fin_tardio": "2025-05-23",
+      "holgura_dias": 21,
+      "critica": false,
+      "predecesores": [
+        "cimiento",
+        "ladrillo"
+      ],
+      "metricas": {
+        "m2": 80.0,
+        "m3": 6.4
+      }
+    },
+    {
+      "elemento": "Carpeta Niveladora",
+      "duracion_dias": 1.0,
+      "inicio": "2025-05-05",
+      "fin": "2025-05-06",
+      "inicio_tardio": "2025-05-23",
+      "fin_tardio": "2025-05-26",
+      "holgura_dias": 18,
+      "critica": false,
+      "predecesores": [
+        "contrapiso"
+      ],
+      "metricas": {
+        "m2": 80.0
+      }
+    },
+    {
+      "elemento": "Pisos Cerámicos (recto)",
+      "duracion_dias": 2.2,
+      "inicio": "2025-05-15",
+      "fin": "2025-05-19",
+      "inicio_tardio": "2025-05-26",
+      "fin_tardio": "2025-05-28",
+      "holgura_dias": 11,
+      "critica": false,
+      "predecesores": [
+        "carpeta",
+        "revoque grueso"
+      ],
+      "metricas": {
+        "m2": 72.0
+      }
+    },
+    {
+      "elemento": "Zócalos",
+      "duracion_dias": 1.0,
+      "inicio": "2025-05-20",
+      "fin": "2025-05-21",
+      "inicio_tardio": "2025-05-28",
+      "fin_tardio": "2025-05-29",
+      "holgura_dias": 8,
+      "critica": false,
+      "predecesores": [
+        "pisos",
+        "ceramico"
+      ],
+      "metricas": {
+        "ml": 120.0
+      }
+    },
+    {
+      "elemento": "Cielorraso Aplicado (Yeso)",
+      "duracion_dias": 1.7,
+      "inicio": "2025-05-22",
+      "fin": "2025-05-23",
+      "inicio_tardio": "2025-05-23",
+      "fin_tardio": "2025-05-26",
+      "holgura_dias": 1,
+      "critica": false,
+      "predecesores": [
+        "revoque fino"
+      ],
+      "metricas": {
+        "m2": 68.0
+      }
+    },
+    {
+      "elemento": "Instalación Eléctrica",
+      "duracion_dias": 1.8,
+      "inicio": "2025-05-01",
+      "fin": "2025-05-02",
+      "inicio_tardio": "2025-05-28",
+      "fin_tardio": "2025-05-29",
+      "holgura_dias": 27,
+      "critica": false,
+      "predecesores": [
+        "ladrillo",
+        "steel frame"
+      ],
+      "metricas": {
+        "bocas": 36
+      }
+    },
+    {
+      "elemento": "Instalación Sanitaria",
+      "duracion_dias": 1.0,
+      "inicio": "2025-05-05",
+      "fin": "2025-05-06",
+      "inicio_tardio": "2025-05-28",
+      "fin_tardio": "2025-05-29",
+      "holgura_dias": 23,
+      "critica": false,
+      "predecesores": [
+        "ladrillo",
+        "contrapiso"
+      ],
+      "metricas": {
+        "bocas": 5
+      }
+    },
+    {
+      "elemento": "Pintura Látex Interior (2 manos)",
+      "duracion_dias": 3.5,
+      "inicio": "2025-05-26",
+      "fin": "2025-05-29",
+      "inicio_tardio": "2025-05-26",
+      "fin_tardio": "2025-05-29",
+      "holgura_dias": 0,
+      "critica": true,
+      "predecesores": [
+        "revoque fino",
+        "cielorraso"
+      ],
+      "metricas": {
+        "m2": 440.0
+      }
+    },
+    {
+      "elemento": "Pintura Exterior Texturada",
+      "duracion_dias": 1.3,
+      "inicio": "2025-05-26",
+      "fin": "2025-05-27",
+      "inicio_tardio": "2025-05-28",
+      "fin_tardio": "2025-05-29",
+      "holgura_dias": 2,
+      "critica": false,
+      "predecesores": [
+        "revoque fino",
+        "cielorraso"
+      ],
+      "metricas": {
+        "m2": 120.0
+      }
+    }
+  ]
+}

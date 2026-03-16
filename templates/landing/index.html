@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{PROYECTO_NOMBRE}} — {{ESTUDIO_NOMBRE}}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-base:        #0a0a0f;
+      --bg-surface:     #111118;
+      --bg-elevated:    #16161f;
+      --glass-bg:       rgba(255, 255, 255, 0.05);
+      --glass-border:   rgba(255, 255, 255, 0.10);
+      --glass-hover-bg: rgba(255, 255, 255, 0.08);
+      --emerald:        #10B981;
+      --emerald-dim:    rgba(16, 185, 129, 0.15);
+      --indigo:         #6366f1;
+      --indigo-dim:     rgba(99, 102, 241, 0.15);
+      --amber:          #F59E0B;
+      --amber-dim:      rgba(245, 158, 11, 0.15);
+      --red:            #EF4444;
+      --red-dim:        rgba(239, 68, 68, 0.15);
+      --text-primary:   #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted:     #64748b;
+      --radius-card:    16px;
+      --radius-pill:    999px;
+      --shadow-card:    0 4px 32px rgba(0, 0, 0, 0.4);
+      --font:           'Inter', system-ui, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      padding: 48px 0;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+      gap: 16px;
+    }
+
+    .header-brand {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-studio {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--indigo);
+    }
+
+    .header-project {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .header-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .semaforo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: 1px solid;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .semaforo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.6; transform: scale(1.3); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 72px 0 48px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--indigo);
+      margin-bottom: 16px;
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── GLASS CARD ── */
+    .card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-card);
+      padding: 28px 32px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      background: var(--glass-hover-bg);
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    /* ── KPI GRID ── */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .kpi-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-card);
+      padding: 28px 24px;
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: var(--radius-card) var(--radius-card) 0 0;
+    }
+
+    .kpi-card:hover {
+      background: var(--glass-hover-bg);
+      border-color: rgba(255, 255, 255, 0.16);
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 48px rgba(0, 0, 0, 0.5);
+    }
+
+    .kpi-card.emerald::before { background: var(--emerald); }
+    .kpi-card.indigo::before  { background: var(--indigo); }
+    .kpi-card.amber::before   { background: var(--amber); }
+    .kpi-card.violet::before  { background: #8b5cf6; }
+
+    .kpi-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .kpi-value {
+      font-size: 2.5rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .kpi-card.emerald .kpi-value { color: var(--emerald); }
+    .kpi-card.indigo  .kpi-value { color: var(--indigo); }
+    .kpi-card.amber   .kpi-value { color: var(--amber); }
+    .kpi-card.violet  .kpi-value { color: #8b5cf6; }
+
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ── SEMAFORO SECTION ── */
+    .semaforo-section {
+      padding: 48px 0;
+    }
+
+    .semaforo-main {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .semaforo-indicator {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .semaforo-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px var(--semaforo-glow, rgba(16,185,129,0.4));
+      animation: glow-pulse 3s infinite;
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% { box-shadow: 0 0 30px var(--semaforo-glow, rgba(16,185,129,0.4)); }
+      50%       { box-shadow: 0 0 60px var(--semaforo-glow, rgba(16,185,129,0.6)); }
+    }
+
+    .semaforo-icon {
+      font-size: 2.5rem;
+    }
+
+    .semaforo-estado-texto {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .semaforo-content {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .semaforo-content h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .semaforo-content p {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ── RESUMEN EJECUTIVO ── */
+    .resumen-ejecutivo {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .resumen-ejecutivo p {
+      margin-bottom: 16px;
+    }
+
+    .resumen-ejecutivo p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── CRONOGRAMA ── */
+    .progress-container {
+      margin-top: 8px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+
+    .progress-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .progress-pct {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--emerald);
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, var(--emerald) 0%, #34d399 100%);
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+      animation: shimmer 2.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0%   { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .camino-critico {
+      margin-top: 24px;
+      padding: 16px 20px;
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: 10px;
+    }
+
+    .camino-critico-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 6px;
+    }
+
+    .camino-critico-items {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    /* ── FOOTER ── */
+    .site-footer {
+      border-top: 1px solid var(--glass-border);
+      padding: 32px 0;
+      margin-top: 32px;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-brand {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer-brand strong {
+      color: var(--indigo);
+    }
+
+    .footer-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .footer-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 4px 12px;
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--glass-border);
+      border: none;
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .kpi-value {
+        font-size: 1.9rem;
+      }
+
+      .semaforo-main {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="header-studio">{{ESTUDIO_NOMBRE}}</span>
+        <span class="header-project">{{PROYECTO_NOMBRE}}</span>
+        <span class="header-meta">{{PROYECTO_LOCALIDAD}} &mdash; Comitente: {{COMITENTE}}</span>
+      </div>
+      <div class="semaforo-badge" style="
+        color: {{SEMAFORO_COLOR}};
+        border-color: {{SEMAFORO_COLOR}};
+        background: rgba(0,0,0,0.3);
+      ">
+        <span class="semaforo-dot" style="background: {{SEMAFORO_COLOR}};"></span>
+        {{SEMAFORO_TEXTO}}
+      </div>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════ -->
+  <div class="hero">
+    <div class="container">
+      <p class="hero-eyebrow">Reporte de Estado &mdash; Inversor</p>
+      <h1 class="hero-title">{{PROYECTO_NOMBRE}}</h1>
+      <p class="hero-subtitle">{{PROYECTO_LOCALIDAD}}</p>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       KPI CARDS
+  ════════════════════════════════════════ -->
+  <section>
+    <div class="container">
+      <p class="section-title">Indicadores Clave</p>
+      <div class="kpi-grid">
+
+        <div class="kpi-card emerald">
+          <p class="kpi-label">Presupuesto Total</p>
+          <p class="kpi-value">{{TOTAL_PRESUPUESTO_ARS}}</p>
+          <p class="kpi-sub">Presupuesto validado del proyecto</p>
+        </div>
+
+        <div class="kpi-card indigo">
+          <p class="kpi-label">Gasto Ejecutado</p>
+          <p class="kpi-value">{{GASTO_EJECUTADO_ARS}}</p>
+          <p class="kpi-sub">Acumulado a la fecha de emisión</p>
+        </div>
+
+        <div class="kpi-card amber">
+          <p class="kpi-label">Avance de Obra</p>
+          <p class="kpi-value">{{AVANCE_REAL_PCT}}%</p>
+          <p class="kpi-sub">Porcentaje completado de obra</p>
+        </div>
+
+        <div class="kpi-card violet">
+          <p class="kpi-label">Fecha Fin Estimada</p>
+          <p class="kpi-value" style="font-size: 1.6rem;">{{FECHA_FIN_ESTIMADA}}</p>
+          <p class="kpi-sub">Según cronograma vigente</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ════════════════════════════════════════
+       SEMAFORO VISUAL
+  ════════════════════════════════════════ -->
+  <section class="semaforo-section">
+    <div class="container">
+      <p class="section-title">Estado General del Proyecto</p>
+      <div class="card">
+        <div class="semaforo-main">
+          <div class="semaforo-indicator">
+            <div class="semaforo-circle" style="
+              background: rgba(0,0,0,0.4);
+              border: 3px solid {{SEMAFORO_COLOR}};
+              --semaforo-glow: {{SEMAFORO_COLOR}}66;
+            ">
+              <span class="semaforo-icon">
+                <!-- ícono según estado -->
+                &#9679;
+              </span>
+            </div>
+            <span class="semaforo-estado-texto" style="color: {{SEMAFORO_COLOR}};">
+              {{SEMAFORO_TEXTO}}
+            </span>
+          </div>
+          <div class="semaforo-content">
+            <h3 style="color: {{SEMAFORO_COLOR}};">{{SEMAFORO_TEXTO}}</h3>
+            <p>{{SEMAFORO_DESCRIPCION}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ════════════════════════════════════════
+       RESUMEN EJECUTIVO
+  ════════════════════════════════════════ -->
+  <section>
+    <div class="container">
+      <p class="section-title">Resumen Ejecutivo</p>
+      <div class="card">
+        <div class="resumen-ejecutivo">
+          {{RESUMEN_EJECUTIVO}}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- ════════════════════════════════════════
+       CRONOGRAMA VISUAL
+  ════════════════════════════════════════ -->
+  <section>
+    <div class="container">
+      <p class="section-title">Cronograma de Obra</p>
+      <div class="card">
+
+        <div class="progress-container">
+          <div class="progress-header">
+            <span class="progress-label">Avance general</span>
+            <span class="progress-pct">{{AVANCE_REAL_PCT}}%</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" style="width: {{AVANCE_REAL_PCT}}%;"></div>
+          </div>
+          <div class="progress-meta">
+            <span>Inicio: — &nbsp;</span>
+            <span>Fin estimado: {{FECHA_FIN_ESTIMADA}}</span>
+          </div>
+        </div>
+
+        <div class="camino-critico">
+          <p class="camino-critico-label">&#9888; Camino Cr&iacute;tico</p>
+          <p class="camino-critico-items">{{CAMINO_CRITICO}}</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-brand">
+          &copy; <strong>{{ESTUDIO_NOMBRE}}</strong> &mdash; Todos los derechos reservados.
+        </span>
+        <span class="footer-date">
+          Emitido el {{FECHA_EMISION}}
+        </span>
+        <span class="footer-badge">
+          &#9889; Generado por Arch Proposal Suite
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
