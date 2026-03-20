@@ -194,3 +194,29 @@ MEMORIA SEMANAL A GUARDAR:
     │           └─ Automático o manual según configuración
     └─ FASE 6: Actualizar memoria del sistema
 ```
+
+## Paso Final — Archivar memoria semanal
+
+Al completar el cierre, ejecutar el proceso de rotación de memoria:
+
+1. **Leer** `memory/memoria_reciente.md` → extraer resumen ≤15 líneas de lo más importante de la semana (decisiones, cambios, bugs resueltos, correcciones permanentes)
+
+2. **Mover** `memory/semana_anterior.md` → `memory/historial/semana_YYYY-MM-DD.md` (usar fecha del viernes)
+
+3. **Escribir** el resumen extraído en nuevo `memory/semana_anterior.md`
+
+4. **Resetear** `memory/memoria_reciente.md` con plantilla vacía para la semana siguiente
+
+5. **Commitear y pushear** el historial a GitHub:
+   ```
+   git add memory/historial/semana_YYYY-MM-DD.md
+   git commit -m "historial: cierre semana YYYY-MM-DD"
+   git push origin main
+   ```
+
+6. **Limpiar historial local** — si hay archivos en `memory/historial/` con más de 28 días:
+   - Ya están en GitHub → eliminar la copia local
+   - Esto mantiene el repo local liviano
+
+> El historial completo siempre vive en GitHub: https://github.com/Leoscd/arch-proposal-suite
+> Para acceder a una semana archivada: `git pull` o el usuario sube el archivo manualmente.
