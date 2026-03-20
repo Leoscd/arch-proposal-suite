@@ -2,6 +2,7 @@
   {
     "id": "01_TRABAJOS_PREPARATORIOS",
     "nombre": "Trabajos Preparatorios",
+    "keywords_cronograma": ["limpieza", "terreno", "nivelacion", "replanteo", "cerco", "obrador", "desmonte", "retiro", "preparacion"],
     "items": [
       { "nombre": "Limpieza del terreno", "unidad": "M2" },
       { "nombre": "Nivelación y Replanteo", "unidad": "M2" },
@@ -11,6 +12,7 @@
   {
     "id": "02_CIMIENTOS_Y_FUNDACIONES",
     "nombre": "Cimientos y Fundaciones",
+    "keywords_cronograma": ["excavacion", "excavación", "cimiento", "fundacion", "fundación", "base aislada", "zapata", "viga de apeo", "muro de contencion", "ciclopeo", "ciclópeo", "hormigon con piedra", "movimiento de suelo", "relleno"],
     "items": [
       { "nombre": "Excavación manual", "unidad": "M3" },
       { "nombre": "Excavación mecánica", "unidad": "M3" },
@@ -24,6 +26,7 @@
   {
     "id": "03_ESTRUCTURAS",
     "nombre": "Estructuras Resistentes",
+    "keywords_cronograma": ["columna", "viga", "losa", "encadenado", "dintel", "tensor", "estructura metalica", "estructura metálica", "perfil c", "ipn", "hormigon armado", "hormigón armado", "HA", "casetones", "nervurada", "vigueta", "filigrana", "estructura de madera", "encofrado"],
     "reglas_especiales": {
       "acero_torsionado": "Se requiere consultar tabla de ingeniero. Lógica: m.l. totales de barras longitudinales y estribos divididos por 12m para obtener CANTIDAD DE BARRAS de compra.",
       "encofrado": "Se calcula siempre en M2."
@@ -44,6 +47,7 @@
   {
     "id": "04_CERRAMIENTOS",
     "nombre": "Cerramientos",
+    "keywords_cronograma": ["ladrillo", "bloque", "tabique", "pared", "muro", "cerramiento", "mampuesto", "steel frame", "wood frame", "construccion en seco", "EPS", "hcca"],
     "items": [
       { "nombre": "Ladrillo Común (15cm o 30cm)", "unidad": "M2" },
       { "nombre": "Ladrillo Hueco (Cerramientos 18cm, Tabiques 12cm)", "unidad": "M2" },
@@ -56,6 +60,7 @@
   {
     "id": "05_AISLACIONES",
     "nombre": "Aislaciones",
+    "keywords_cronograma": ["aislacion", "aislación", "barrera de vapor", "capa aisladora", "impermeabilizacion", "impermeabilización", "hidrofugo", "hidrófugo"],
     "items": [
       { "nombre": "Capa Aisladora Horizontal (Cajón)", "unidad": "ML_O_M2" },
       { "nombre": "Capa Aisladora Vertical", "unidad": "M2" },
@@ -65,6 +70,7 @@
   {
     "id": "06_CUBIERTAS",
     "nombre": "Cubiertas de Techos",
+    "keywords_cronograma": ["cubierta", "techo", "chapa", "membrana", "teja", "cubierta plana", "cubierta inclinada", "canaleta", "bajada de agua", "aislacion termica techo"],
     "reglas_especiales": {
       "estructura_soporte": "Debe definirse antes si el soporte será perfiles metálicos, madera o sobre losa."
     },
@@ -77,6 +83,7 @@
   {
     "id": "07_REVOQUES",
     "nombre": "Revoques",
+    "keywords_cronograma": ["revoque", "revoco", "azotado", "enlucido", "mortero", "jaharro", "grueso", "fino"],
     "items": [
       { "nombre": "Revoque Grueso (Interior y Exterior)", "unidad": "M2" },
       { "nombre": "Revoque Fino (Interior y Exterior)", "unidad": "M2" },
@@ -86,6 +93,7 @@
   {
     "id": "08_CONTRAPISOS_CARPETAS",
     "nombre": "Contrapisos y Carpetas",
+    "keywords_cronograma": ["contrapiso", "carpeta", "niveladora", "hormigon pobre", "hormigón pobre", "subpiso"],
     "items": [
       { "nombre": "Contrapiso H° Pobre", "unidad": "M2_O_M3" },
       { "nombre": "Carpeta Niveladora", "unidad": "M2" }
@@ -94,6 +102,7 @@
   {
     "id": "09_PISOS",
     "nombre": "Pisos, Zócalos y Revestimientos",
+    "keywords_cronograma": ["piso", "ceramica", "cerámica", "porcelanato", "madera", "revestimiento", "piedra", "murete exterior", "zocalo", "zócalo", "parquet", "vinilico", "vinílico"],
     "items": [
       { "nombre": "Pisos Cerámicos / Porcelanatos / Madera", "unidad": "M2" },
       { "nombre": "Revestimiento Cerámico (Baños/Cocinas)", "unidad": "M2" },
@@ -104,6 +113,7 @@
   {
     "id": "10_CIELORRASOS",
     "nombre": "Cielorrasos",
+    "keywords_cronograma": ["cielorraso", "cieloraso", "durlock", "yeso", "placa de yeso", "suspendido", "aplicado"],
     "items": [
       { "nombre": "Cielorraso Aplicado al Yeso", "unidad": "M2" },
       { "nombre": "Cielorraso Suspendido (Placas de Yeso/Durlock)", "unidad": "M2" }
@@ -112,6 +122,7 @@
   {
     "id": "11_INSTALACIONES",
     "nombre": "Instalaciones",
+    "keywords_cronograma": ["instalacion", "instalación", "sanitaria", "cloacal", "pluvial", "agua fria", "agua caliente", "agua fría", "gas", "electrica", "eléctrica", "cañeria", "cañería", "caño", "plomeria", "plomería", "artefacto", "griferia", "grifería", "boca"],
     "items": [
       { "nombre": "Instalación Sanitaria (Cloacal y Pluvial)", "unidad": "GLB_O_BOCA" },
       { "nombre": "Instalación de Agua (Fría/Caliente)", "unidad": "BOCA" },
@@ -123,6 +134,7 @@
   {
     "id": "12_CARPINTERIAS",
     "nombre": "Carpinterías y Herrería",
+    "keywords_cronograma": ["carpinteria", "carpintería", "herreria", "herrería", "puerta", "ventana", "aluminio", "pvc", "baranda", "reja", "placard", "placar", "bajomesada", "mobiliario fijo"],
     "items": [
       { "nombre": "Puertas", "unidad": "UN" },
       { "nombre": "Ventanas (Aluminio/PVC)", "unidad": "UN_O_M2" },
@@ -133,6 +145,7 @@
   {
     "id": "13_PINTURAS",
     "nombre": "Pinturas y Tratamientos",
+    "keywords_cronograma": ["pintura", "latex", "látex", "texturado", "esmalte", "tratamiento", "barniz", "sellador", "fijador", "pintura interior", "pintura exterior"],
     "items": [
       { "nombre": "Pintura Látex Interior", "unidad": "M2" },
       { "nombre": "Pintura Exterior / Texturados", "unidad": "M2" },
@@ -142,6 +155,7 @@
   {
     "id": "14_LIMPIEZA",
     "nombre": "Terminación y Limpieza Final",
+    "keywords_cronograma": ["limpieza final", "terminacion", "terminación", "entrega de obra", "limpieza de obra"],
     "items": [
       { "nombre": "Limpieza Final de Obra", "unidad": "M2_O_GLB" }
     ]

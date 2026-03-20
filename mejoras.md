@@ -9,9 +9,9 @@
 > Todas las fases siguientes dependen de esta.
 
 ### 1.1 Crear `outputs/sesion_activa.json`
-- [ ] Definir estructura del archivo
-- [ ] El orquestador (CLAUDE.md) lo escribe ANTES de llamar cualquier script
-- [ ] Si no existe, los scripts usan modo `"obra_completa"` como fallback
+- [x] Definir estructura del archivo
+- [x] El orquestador (CLAUDE.md) lo escribe ANTES de llamar cualquier script
+- [x] Si no existe, los scripts usan modo `"obra_completa"` como fallback
 
 **Estructura esperada:**
 ```json
@@ -27,8 +27,8 @@
 ---
 
 ### 1.2 Agregar `keywords_cronograma` en `references/rubros.json`
-- [ ] Agregar campo `keywords_cronograma` a cada rubro del catálogo
-- [ ] Estas keywords permiten que el verificador de scope identifique a qué rubro pertenece cada tarea
+- [x] Agregar campo `keywords_cronograma` a cada rubro del catálogo
+- [x] Estas keywords permiten que el verificador de scope identifique a qué rubro pertenece cada tarea
 
 **Ejemplo:**
 ```json
@@ -63,10 +63,10 @@
 ---
 
 ### 1.4 Actualizar `CLAUDE.md` — flujo de selección de rubros
-- [ ] Antes de calcular presupuesto o cronograma, el orquestador presenta la lista de rubros de `references/rubros.json`
-- [ ] Espera selección del usuario (1 rubro, varios, o "toda la obra")
-- [ ] Escribe la selección en `sesion_activa.json`
-- [ ] Solo entonces llama al agente correspondiente
+- [x] Antes de calcular presupuesto o cronograma, el orquestador presenta la lista de rubros de `references/rubros.json`
+- [x] Espera selección del usuario (1 rubro, varios, o "toda la obra")
+- [x] Escribe la selección en `sesion_activa.json`
+- [x] Solo entonces llama al agente correspondiente
 
 ---
 

@@ -30,6 +30,22 @@ Este sistema se compone de 5 agentes especializados que trabajan en conjunto. To
 - **FEEDBACK Y CORRECCIONES EN VIVO:** El usuario puede interrumpir a cualquier agente en cualquier momento para pedir cambios (ej. *"haz el cálculo pero sin cargas sociales"* o *"corrige el rendimiento del bloque a 10 por m2"*). El agente DEBE ajustar temporalmente sus variables para complacer la petición y ofrecer guardar la corrección permanentemente en `./outputs/config_personalizada.json`.
 - El Dashboard del cliente (`agente-inversor`) puede configurarse para actualizarse automáticamente al cargar un dato, o en modo "Manual" (sólo cuando el director de obra lo apruebe, por ejemplo los viernes).
 
+## Flujo de Selección de Rubros
+
+Antes de calcular cualquier presupuesto o cronograma, el orquestador SIEMPRE debe:
+
+1. **Leer** `references/rubros.json` y presentar la lista de rubros disponibles al usuario
+2. **Esperar** selección del usuario:
+   - Un rubro puntual → `modo_alcance: "rubro_puntual"`
+   - Varios rubros → `modo_alcance: "rubros_multiples"`
+   - "toda la obra" o sin especificar → `modo_alcance: "obra_completa"`
+3. **Escribir** la selección en `outputs/sesion_activa.json` ANTES de llamar cualquier script
+4. **Solo entonces** llamar al agente correspondiente (cronograma, presupuesto, etc.)
+
+**Fallback:** Si `sesion_activa.json` no existe o está vacío, los scripts usan `modo_alcance: "obra_completa"` automáticamente y muestran un warning en consola.
+
+**Post-cronograma:** Después de generar el cronograma, siempre ejecutar `scripts/verify_scope.py` y mostrar el resultado al usuario antes de continuar.
+
 ## Reglas Globales
 - **NUNCA** sobreescribir archivos dentro de la carpeta `./inputs/`.
 - **MONEDA OBLIGATORIA:** Todos los precios y cálculos deben darse siempre en formato de **Pesos Argentinos (ARS)**. Si un insumo está en USD, el agente correspondiente debe buscar la cotización del día para convertirlo.
