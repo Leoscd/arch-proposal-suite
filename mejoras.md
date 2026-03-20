@@ -42,10 +42,10 @@
 ---
 
 ### 1.3 Crear `scripts/verify_scope.py`
-- [ ] Lee `sesion_activa.json` (rubros pedidos)
-- [ ] Lee `outputs/cronograma.json` (tareas generadas)
-- [ ] Cruza cada tarea del cronograma contra las keywords del rubro seleccionado
-- [ ] Genera `outputs/auditoria_scope.json` con el resultado
+- [x] Lee `sesion_activa.json` (rubros pedidos)
+- [x] Lee `outputs/cronograma.json` (tareas generadas)
+- [x] Cruza cada tarea del cronograma contra las keywords del rubro seleccionado
+- [x] Genera `outputs/auditoria_scope.json` con el resultado
 
 **Estructura de salida:**
 ```json
@@ -58,7 +58,7 @@
 }
 ```
 
-- [ ] Agregar en `CLAUDE.md`: después de generar cronograma, siempre ejecutar `verify_scope.py` y mostrar resultado al usuario
+- [x] Agregar en `CLAUDE.md`: después de generar cronograma, siempre ejecutar `verify_scope.py` y mostrar resultado al usuario
 
 ---
 
