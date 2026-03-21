@@ -1,0 +1,202 @@
+{
+  "alcance": {
+    "rubros_incluidos": [
+      "TODOS"
+    ],
+    "modo": "obra_completa",
+    "descripcion": "Todos los rubros de la obra"
+  },
+  "configuracion": {
+    "fecha_inicio": "2026-03-21",
+    "personal_oficial": 1,
+    "personal_ayudante": 1,
+    "jornada_hs": 8.0
+  },
+  "duracion_total_dias": 21,
+  "fecha_fin_estimada": "2026-04-20",
+  "camino_critico": [
+    "03_ESTRUCTURAS — Estructuras Resistentes"
+  ],
+  "tareas": [
+    {
+      "elemento": "01_TRABAJOS_PREPARATORIOS — Trabajos Preparatorios",
+      "duracion_dias": 1.0,
+      "costo_total_ars": 62157.96,
+      "inicio": "2026-03-21",
+      "fin": "2026-03-23",
+      "inicio_tardio": "2026-04-17",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 27,
+      "critica": false,
+      "predecesores": [],
+      "metricas": {
+        "items_agrupados": 1
+      }
+    },
+    {
+      "elemento": "02_CIMIENTOS_Y_FUNDACIONES — Cimientos y Fundaciones",
+      "duracion_dias": 7.0,
+      "costo_total_ars": 1700810.57,
+      "inicio": "2026-03-21",
+      "fin": "2026-03-31",
+      "inicio_tardio": "2026-04-01",
+      "fin_tardio": "2026-04-10",
+      "holgura_dias": 11,
+      "critica": false,
+      "predecesores": [
+        "excavacion"
+      ],
+      "metricas": {
+        "items_agrupados": 2
+      }
+    },
+    {
+      "elemento": "03_ESTRUCTURAS — Estructuras Resistentes",
+      "duracion_dias": 21.6,
+      "costo_total_ars": 8901522.61,
+      "inicio": "2026-03-21",
+      "fin": "2026-04-20",
+      "inicio_tardio": "2026-03-20",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 0,
+      "critica": true,
+      "predecesores": [],
+      "metricas": {
+        "items_agrupados": 4
+      }
+    },
+    {
+      "elemento": "04_CERRAMIENTOS — Cerramientos",
+      "duracion_dias": 10.8,
+      "costo_total_ars": 3611683.89,
+      "inicio": "2026-03-21",
+      "fin": "2026-04-03",
+      "inicio_tardio": "2026-04-06",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 16,
+      "critica": false,
+      "predecesores": [],
+      "metricas": {
+        "items_agrupados": 1
+      }
+    },
+    {
+      "elemento": "05_AISLACIONES — Aislaciones",
+      "duracion_dias": 1.0,
+      "costo_total_ars": 132454.62,
+      "inicio": "2026-03-21",
+      "fin": "2026-03-23",
+      "inicio_tardio": "2026-04-17",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 27,
+      "critica": false,
+      "predecesores": [
+        "cubierta"
+      ],
+      "metricas": {
+        "items_agrupados": 1
+      }
+    },
+    {
+      "elemento": "07_REVOQUES — Revoques",
+      "duracion_dias": 15.0,
+      "costo_total_ars": 3507838.24,
+      "inicio": "2026-03-21",
+      "fin": "2026-04-10",
+      "inicio_tardio": "2026-03-30",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 9,
+      "critica": false,
+      "predecesores": [],
+      "metricas": {
+        "items_agrupados": 2
+      }
+    },
+    {
+      "elemento": "08_CONTRAPISOS_CARPETAS — Contrapisos y Carpetas",
+      "duracion_dias": 2.4,
+      "costo_total_ars": 1138811.3,
+      "inicio": "2026-04-01",
+      "fin": "2026-04-03",
+      "inicio_tardio": "2026-04-10",
+      "fin_tardio": "2026-04-14",
+      "holgura_dias": 9,
+      "critica": false,
+      "predecesores": [
+        "cimiento",
+        "ladrillo"
+      ],
+      "metricas": {
+        "items_agrupados": 2
+      }
+    },
+    {
+      "elemento": "09_PISOS — Pisos, Zócalos y Revestimientos",
+      "duracion_dias": 4.7,
+      "costo_total_ars": 1632357.09,
+      "inicio": "2026-04-06",
+      "fin": "2026-04-10",
+      "inicio_tardio": "2026-04-14",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 8,
+      "critica": false,
+      "predecesores": [
+        "carpeta",
+        "revoque grueso"
+      ],
+      "metricas": {
+        "items_agrupados": 2
+      }
+    },
+    {
+      "elemento": "10_CIELORRASOS — Cielorrasos",
+      "duracion_dias": 2.8,
+      "costo_total_ars": 482571.38,
+      "inicio": "2026-03-21",
+      "fin": "2026-03-24",
+      "inicio_tardio": "2026-04-07",
+      "fin_tardio": "2026-04-09",
+      "holgura_dias": 17,
+      "critica": false,
+      "predecesores": [
+        "revoque fino"
+      ],
+      "metricas": {
+        "items_agrupados": 1
+      }
+    },
+    {
+      "elemento": "11_INSTALACIONES — Instalaciones",
+      "duracion_dias": 3.7,
+      "costo_total_ars": 684712.82,
+      "inicio": "2026-03-21",
+      "fin": "2026-03-25",
+      "inicio_tardio": "2026-04-15",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 25,
+      "critica": false,
+      "predecesores": [],
+      "metricas": {
+        "items_agrupados": 2
+      }
+    },
+    {
+      "elemento": "13_PINTURAS — Pinturas y Tratamientos",
+      "duracion_dias": 7.4,
+      "costo_total_ars": 1601514.96,
+      "inicio": "2026-03-25",
+      "fin": "2026-04-03",
+      "inicio_tardio": "2026-04-09",
+      "fin_tardio": "2026-04-20",
+      "holgura_dias": 15,
+      "critica": false,
+      "predecesores": [
+        "revoque fino",
+        "cielorraso"
+      ],
+      "metricas": {
+        "items_agrupados": 2
+      }
+    }
+  ]
+}

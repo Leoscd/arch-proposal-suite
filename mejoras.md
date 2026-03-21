@@ -157,12 +157,12 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 ---
 
 ### 3.3 Convención de nombres de archivos por alcance
-- [ ] Cada presupuesto genera un archivo con nombre descriptivo:
+- [x] Cada presupuesto genera un archivo con nombre descriptivo:
   - `presupuesto_03_estructuras.json`
   - `presupuesto_04_mamposteria.json`
   - `presupuesto_obra_completa.json`
-- [ ] Nunca sobreescribir — siempre versionar o nombrar por rubro
-- [ ] Actualizar referencias en `estado-proyecto.json` cuando se genera un nuevo presupuesto
+- [x] Nunca sobreescribir — siempre versionar o nombrar por rubro
+- [x] Actualizar referencias en `estado-proyecto.json` cuando se genera un nuevo presupuesto
 
 ---
 

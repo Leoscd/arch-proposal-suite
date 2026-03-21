@@ -546,6 +546,101 @@ class CalculadoraPresupuesto:
             "nota": "Honorarios profesionales a agregar por separado."
         }
 
+    # ─── EXPORTAR (Tarea 3.3) ────────────────────────────────────────────────
+
+    @staticmethod
+    def _nombre_archivo_presupuesto(sesion: dict) -> str:
+        """Genera nombre descriptivo del JSON de presupuesto según el scope de sesion."""
+        modo = sesion.get("modo_alcance", "obra_completa")
+        if modo == "obra_completa":
+            return "presupuesto_obra_completa.json"
+        rubros = sesion.get("rubros_seleccionados", [])
+        if rubros:
+            rubros_str = "_".join(r.lower() for r in rubros)
+            return f"presupuesto_{rubros_str}.json"
+        return "presupuesto.json"
+
+    @staticmethod
+    def _actualizar_estado_proyecto_presupuesto(ruta_archivo: str, dir_salida: str):
+        """
+        Agrega la ruta del archivo de presupuesto exportado a estado-proyecto.json
+        bajo archivos_generados.presupuestos y actualiza ultimo_presupuesto.
+        """
+        estado_path = os.path.join(dir_salida, "estado-proyecto.json")
+        if not os.path.exists(estado_path):
+            estado = {}
+        else:
+            try:
+                with open(estado_path, encoding="utf-8") as f:
+                    estado = json.load(f)
+            except Exception:
+                estado = {}
+
+        if "archivos_generados" not in estado:
+            estado["archivos_generados"] = {
+                "cronogramas": [],
+                "presupuestos": [],
+                "ultimo_cronograma": None,
+                "ultimo_presupuesto": None,
+            }
+
+        presupuestos = estado["archivos_generados"].get("presupuestos", [])
+        if ruta_archivo not in presupuestos:
+            presupuestos.append(ruta_archivo)
+        estado["archivos_generados"]["presupuestos"] = presupuestos
+        estado["archivos_generados"]["ultimo_presupuesto"] = ruta_archivo
+
+        with open(estado_path, "w", encoding="utf-8") as f:
+            json.dump(estado, f, indent=2, ensure_ascii=False)
+
+    def exportar(self, dir_salida: str = None, sesion: dict = None):
+        """
+        Exporta el presupuesto consolidado en outputs/ como JSON.
+        Escribe siempre presupuesto.json (compatibilidad) y además un archivo
+        con nombre descriptivo según el scope (Tarea 3.3).
+
+        Args:
+            dir_salida: directorio de salida. Si None, usa ../outputs/ relativo al script.
+            sesion: dict de sesion_activa.json. Si None, intenta cargarlo automáticamente.
+        """
+        base = os.path.dirname(os.path.abspath(__file__))
+        if dir_salida is None:
+            dir_salida = os.path.normpath(os.path.join(base, "..", "outputs"))
+        os.makedirs(dir_salida, exist_ok=True)
+
+        # Cargar sesión si no se proveyó
+        if sesion is None:
+            sesion_path = os.path.normpath(os.path.join(base, "..", "outputs", "sesion_activa.json"))
+            if os.path.exists(sesion_path):
+                try:
+                    with open(sesion_path, encoding="utf-8") as f:
+                        sesion = json.load(f)
+                except Exception:
+                    sesion = {}
+            else:
+                sesion = {}
+
+        datos = self.consolidar()
+
+        # Archivo original (compatibilidad con generate_schedule.py / cargar_presupuesto())
+        ruta_base = os.path.join(dir_salida, "presupuesto.json")
+        with open(ruta_base, "w", encoding="utf-8") as f:
+            json.dump(datos, f, indent=2, ensure_ascii=False)
+        print(f"[Presupuesto] JSON exportado -> {ruta_base}")
+
+        # Archivo adicional con nombre descriptivo por scope (3.3)
+        nombre_descriptivo = self._nombre_archivo_presupuesto(sesion)
+        if nombre_descriptivo != "presupuesto.json":
+            ruta_descriptiva = os.path.join(dir_salida, nombre_descriptivo)
+            with open(ruta_descriptiva, "w", encoding="utf-8") as f:
+                json.dump(datos, f, indent=2, ensure_ascii=False)
+            print(f"[Presupuesto] JSON (scope)  -> {ruta_descriptiva}")
+            self._actualizar_estado_proyecto_presupuesto(ruta_descriptiva, dir_salida)
+        else:
+            self._actualizar_estado_proyecto_presupuesto(ruta_base, dir_salida)
+
+        return datos
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # FUNCIÓN DE SELECCIÓN POR RUBROS (Tarea 3.1)
