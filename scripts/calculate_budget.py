@@ -548,6 +548,160 @@ class CalculadoraPresupuesto:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# FUNCIÓN DE SELECCIÓN POR RUBROS (Tarea 3.1)
+# ─────────────────────────────────────────────────────────────────────────────
+
+def calcular_desde_seleccion(rubros_ids: list,
+                             ruta_rubros: str = "../references/rubros.json",
+                             ruta_precios: str = "",
+                             **kwargs_calc) -> dict:
+    """
+    Recibe lista de IDs de rubros y ejecuta solo los calc_* correspondientes.
+    Devuelve dict con resultados por rubro y un total_ars consolidado.
+
+    Parámetros
+    ----------
+    rubros_ids  : lista de IDs exactos, p.ej. ["03_ESTRUCTURAS", "04_CERRAMIENTOS"]
+    ruta_rubros : ruta al rubros.json (por defecto relativa al script)
+    ruta_precios: ruta al CSV de precios (cadena vacía = usar defaults)
+    **kwargs_calc: kwargs opcionales para sobreescribir métricas por defecto
+                   (ver METRICAS_POR_DEFECTO dentro de esta función)
+
+    Ejemplo
+    -------
+    resultado = calcular_desde_seleccion(["03_ESTRUCTURAS", "04_CERRAMIENTOS"])
+    print(resultado["total_ars"])
+    """
+    import warnings as _warnings
+
+    # ── Métricas por defecto para cada rubro ─────────────────────────────────
+    # Se usan cuando no se pasan valores específicos vía kwargs_calc.
+    # Representan una obra residencial de referencia ~60 m2.
+    METRICAS_POR_DEFECTO = {
+        "01_TRABAJOS_PREPARATORIOS": {"m2": 60},
+        "02_CIMIENTOS_Y_FUNDACIONES": {"m3_excavacion": 15, "m3_cimiento": 8},
+        "03_ESTRUCTURAS":             {"volumen_m3": 3.0, "kg_acero": 280,
+                                       "m2_encofrado": 18},
+        "04_CERRAMIENTOS":            {"m2": 120},
+        "05_AISLACIONES":             {"ml": 40},
+        "06_CUBIERTAS":               {"m2": 65},
+        "07_REVOQUES":                {"m2": 200},
+        "08_CONTRAPISOS_CARPETAS":    {"m2": 60},
+        "09_PISOS":                   {"m2": 55, "ml_zocalos": 80},
+        "10_CIELORRASOS":             {"m2": 55},
+        "11_INSTALACIONES":           {"bocas_elect": 25, "bocas_sanit": 8},
+        "12_CARPINTERIAS":            {},  # sin calc_* implementado aún
+        "13_PINTURAS":                {"m2_int": 350, "m2_ext": 80},
+        "14_LIMPIEZA":                {},  # sin calc_* implementado aún
+    }
+
+    # ── Mapeo explícito rubro_id → función(es) de cálculo ────────────────────
+    # Cada entrada es una lista de callables que reciben (calc, metricas).
+    # Si un rubro no tiene entrada aquí → warning y se omite.
+    def _run_01(calc, m):
+        calc.calc_replanteo(m.get("m2", 60))
+
+    def _run_02(calc, m):
+        calc.calc_excavacion(m.get("m3_excavacion", 15))
+        calc.calc_cimiento_corrido(m.get("m3_cimiento", 8))
+
+    def _run_03(calc, m):
+        calc.calc_elemento_ha(
+            "Columnas HA",
+            volumen_m3=m.get("volumen_m3", 3.0),
+            kg_acero=m.get("kg_acero", 280),
+            m2_encofrado=m.get("m2_encofrado", 18),
+        )
+
+    def _run_04(calc, m):
+        calc.calc_ladrillo_hueco(m.get("m2", 120))
+
+    def _run_05(calc, m):
+        calc.calc_capa_aisladora(m.get("ml", 40))
+
+    def _run_06(calc, m):
+        calc.calc_cubierta_chapa(m.get("m2", 65))
+
+    def _run_07(calc, m):
+        calc.calc_revoque_grueso(m.get("m2", 200))
+        calc.calc_revoque_fino(m.get("m2", 200))
+
+    def _run_08(calc, m):
+        calc.calc_contrapiso(m.get("m2", 60))
+        calc.calc_carpeta(m.get("m2", 60))
+
+    def _run_09(calc, m):
+        calc.calc_pisos_ceramicos(m.get("m2", 55))
+        calc.calc_zocalos(m.get("ml_zocalos", 80))
+
+    def _run_10(calc, m):
+        calc.calc_cielorraso_aplicado(m.get("m2", 55))
+
+    def _run_11(calc, m):
+        calc.calc_instalacion_electrica(m.get("bocas_elect", 25))
+        calc.calc_instalacion_sanitaria(m.get("bocas_sanit", 8))
+
+    def _run_13(calc, m):
+        calc.calc_pintura_interior(m.get("m2_int", 350))
+        calc.calc_pintura_exterior(m.get("m2_ext", 80))
+
+    MAPEO_RUBROS = {
+        "01_TRABAJOS_PREPARATORIOS": _run_01,
+        "02_CIMIENTOS_Y_FUNDACIONES": _run_02,
+        "03_ESTRUCTURAS":             _run_03,
+        "04_CERRAMIENTOS":            _run_04,
+        "05_AISLACIONES":             _run_05,
+        "06_CUBIERTAS":               _run_06,
+        "07_REVOQUES":                _run_07,
+        "08_CONTRAPISOS_CARPETAS":    _run_08,
+        "09_PISOS":                   _run_09,
+        "10_CIELORRASOS":             _run_10,
+        "11_INSTALACIONES":           _run_11,
+        # 12_CARPINTERIAS — sin calc_* implementado aún
+        "13_PINTURAS":                _run_13,
+        # 14_LIMPIEZA      — sin calc_* implementado aún
+    }
+
+    # ── Ejecutar ──────────────────────────────────────────────────────────────
+    resultados_por_rubro: dict = {}
+    total_ars: float = 0.0
+
+    for rubro_id in rubros_ids:
+        if rubro_id not in MAPEO_RUBROS:
+            print(f"[WARNING] calcular_desde_seleccion: rubro '{rubro_id}' "
+                  "no tiene función de cálculo mapeada — se omite.")
+            continue
+
+        # Instancia calculadora independiente por rubro para aislar resultados
+        calc = CalculadoraPresupuesto(ruta_rubros, ruta_precios)
+
+        # Métricas: valores por defecto actualizados con lo que haya en kwargs_calc
+        metricas = dict(METRICAS_POR_DEFECTO.get(rubro_id, {}))
+        metricas.update(kwargs_calc.get(rubro_id, {}))
+
+        # Ejecutar las funciones del rubro
+        MAPEO_RUBROS[rubro_id](calc, metricas)
+
+        resumen_rubro = calc.consolidar()
+        subtotal_rubro = resumen_rubro["COSTO_DIRECTO_TOTAL"]
+
+        resultados_por_rubro[rubro_id] = {
+            "items": resumen_rubro["items"],
+            "subtotal_materiales": resumen_rubro["TOTAL_MATERIALES"],
+            "subtotal_mano_obra": resumen_rubro["TOTAL_MANO_DE_OBRA"],
+            "subtotal_equipos": resumen_rubro["TOTAL_EQUIPOS"],
+            "subtotal_ars": subtotal_rubro,
+        }
+        total_ars += subtotal_rubro
+
+    return {
+        "rubros_calculados": list(resultados_por_rubro.keys()),
+        "resultados": resultados_por_rubro,
+        "total_ars": round(total_ars, 2),
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # PRUEBA INTEGRAL: simula una casa simple de 60m2
 # ─────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":

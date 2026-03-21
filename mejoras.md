@@ -74,10 +74,10 @@
 > Problema actual: `cronograma.json` tiene 19 tareas de obra completa aunque se pidió solo estructuras.
 
 ### 2.1 Corregir bloque `__main__` de `scripts/generate_schedule.py`
-- [ ] Leer `outputs/sesion_activa.json` al inicio
-- [ ] Si `modo_alcance == "rubro_puntual"` → solo incluir tareas del rubro seleccionado
-- [ ] Si `modo_alcance == "obra_completa"` → incluir todos los rubros como bloques globales (sin desglose interno)
-- [ ] Si `sesion_activa.json` no existe → comportamiento actual como fallback (con warning en consola)
+- [x] Leer `outputs/sesion_activa.json` al inicio
+- [x] Si `modo_alcance == "rubro_puntual"` → solo incluir tareas del rubro seleccionado
+- [x] Si `modo_alcance == "obra_completa"` → incluir todos los rubros como bloques globales (sin desglose interno)
+- [x] Si `sesion_activa.json` no existe → comportamiento actual como fallback (con warning en consola)
 
 ---
 
@@ -99,13 +99,13 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 ...
 ```
 
-- [ ] Implementar lógica de modo en `generate_schedule.py`
-- [ ] Agregar campo `"modo"` en el JSON exportado del cronograma
+- [x] Implementar lógica de modo en `generate_schedule.py`
+- [x] Agregar campo `"modo"` en el JSON exportado del cronograma
 
 ---
 
 ### 2.3 Agregar campo `"alcance"` en el JSON exportado del cronograma
-- [ ] El archivo `cronograma.json` debe registrar siempre qué se incluyó
+- [x] El archivo `cronograma.json` debe registrar siempre qué se incluyó
 
 **Estructura a agregar:**
 ```json
@@ -122,9 +122,9 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 ---
 
 ### 2.4 Agregar `costo_total_ars` en cada tarea del cronograma
-- [ ] Cuando se genera el cronograma junto con el presupuesto, enlazar cada tarea con su costo
-- [ ] El enlace se hace por nombre de elemento (matching fuzzy o por ID de rubro)
-- [ ] Si no hay presupuesto calculado para esa tarea, el campo queda en `null`
+- [x] Cuando se genera el cronograma junto con el presupuesto, enlazar cada tarea con su costo
+- [x] El enlace se hace por nombre de elemento (matching fuzzy o por ID de rubro)
+- [x] Si no hay presupuesto calculado para esa tarea, el campo queda en `null`
 
 **Ejemplo en cada tarea:**
 ```json
@@ -143,16 +143,16 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 > Objetivo: que el usuario elija qué rubros calcular antes de ejecutar cualquier script.
 
 ### 3.1 Agregar método `calcular_desde_seleccion()` en `scripts/calculate_budget.py`
-- [ ] Recibe lista de IDs de rubros (ej. `["03_ESTRUCTURAS", "04_MAMPOSTERIA"]`)
-- [ ] Mapeo explícito entre ID de rubro y función de cálculo correspondiente
-- [ ] Llama internamente solo a los `calc_*` relevantes
+- [x] Recibe lista de IDs de rubros (ej. `["03_ESTRUCTURAS", "04_MAMPOSTERIA"]`)
+- [x] Mapeo explícito entre ID de rubro y función de cálculo correspondiente
+- [x] Llama internamente solo a los `calc_*` relevantes
 
 ---
 
 ### 3.2 Crear `scripts/_cronograma_por_rubro.py`
-- [ ] Análogo al existente `_calc_estructuras.py` pero para el cronograma
-- [ ] Lee `sesion_activa.json` para saber qué rubros incluir
-- [ ] Genera solo las tareas correspondientes
+- [x] Análogo al existente `_calc_estructuras.py` pero para el cronograma
+- [x] Lee `sesion_activa.json` para saber qué rubros incluir
+- [x] Genera solo las tareas correspondientes
 
 ---
 
