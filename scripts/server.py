@@ -62,6 +62,22 @@ def _read_estado() -> dict:
     with open(ESTADO_PATH, encoding="utf-8") as f:
         return json.load(f)
 
+
+def registrar_en_memoria(tipo: str, datos: dict):
+    """Agrega una línea de evento a memory/memoria_reciente.md."""
+    memoria_path = BASE_DIR / "memory" / "memoria_reciente.md"
+    if not memoria_path.exists():
+        return
+    fecha = datetime.now().strftime("%Y-%m-%d %H:%M")
+    if tipo == "gasto":
+        linea = f"\n- [{fecha}] Gasto cargado: {datos.get('emisor','?')} — ${datos.get('monto_ars', 0):,.0f} ARS — {datos.get('materiales','')[:50]}"
+    elif tipo == "avance":
+        linea = f"\n- [{fecha}] Avance registrado: Semana {datos.get('semana','?')} — {datos.get('porcentaje_completado','?')}% — {datos.get('descripcion','')[:50]}"
+    else:
+        return
+    with memoria_path.open("a", encoding="utf-8") as f:
+        f.write(linea)
+
 # ---------------------------------------------------------------------------
 # Endpoints GET
 # ---------------------------------------------------------------------------
@@ -155,6 +171,7 @@ def post_gasto():
     }
     estado["gastos_reales"].append(entrada)
     _write_json(ESTADO_PATH, estado)
+    registrar_en_memoria("gasto", entrada)
 
     return jsonify({"ok": True, "gasto_registrado": entrada}), 201
 
@@ -191,6 +208,7 @@ def post_avance():
     }
     estado["avances"].append(entrada)
     _write_json(ESTADO_PATH, estado)
+    registrar_en_memoria("avance", entrada)
 
     return jsonify({"ok": True, "avance_registrado": entrada}), 201
 

@@ -1077,17 +1077,20 @@
     <!-- SECCION: COMPUTO DE MATERIALES -->
     <div class="section-title" id="computo">Computo de materiales</div>
 
+    <div style="margin-bottom:12px; display:flex; justify-content:flex-end;">
+      <button class="btn btn-cyan" onclick="exportarComputoHTML()">&#128196; Exportar computo HTML</button>
+    </div>
+
     <div class="card" style="padding:0; margin-bottom:28px;">
       <div class="table-wrap">
-        <table>
+        <table id="tablaComputoMain">
           <thead>
             <tr>
-              <th>Rubro / elemento</th>
+              <th>Elemento</th>
               <th>Duracion (dias)</th>
               <th style="text-align:right;">Costo ARS</th>
               <th style="text-align:right;">% del total</th>
-              <th>Metricas</th>
-              <th>Corregir cantidad</th>
+              <th style="text-align:center;">Expandir</th>
             </tr>
           </thead>
           <tbody id="tablaComputo"></tbody>
@@ -1096,7 +1099,6 @@
               <td class="highlight">TOTAL OBRA</td>
               <td class="mono highlight" id="totalDias">—</td>
               <td class="mono highlight" style="text-align:right;" id="totalCosto">—</td>
-              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -1403,29 +1405,33 @@ function renderTickets(estado) {
 }
 
 // ── COMPUTO MATERIALES ───────────────────────────────────────────────────────
+// Mapa de costos originales para recálculo proporcional
+const _costoOriginal = {};
+
 function renderComputo() {
   const { elementos, totales } = COMPUTO_LOCAL;
   const tbody = document.getElementById('tablaComputo');
   tbody.innerHTML = '';
 
-  elementos.forEach(el => {
+  // Nombres de las métricas físicas a mostrar en el detalle
+  const METRICAS_FISICAS = ['volumen_m3', 'acero_kg', 'encofrado_m2', 'longitud_ml', 'unidades'];
+
+  elementos.forEach((el, idx) => {
     const pct = totales.costo_total_ars > 0
       ? (el.costo_total_ars / totales.costo_total_ars * 100).toFixed(1)
       : '0.0';
 
-    // Metricas disponibles
-    const m = el.metricas || {};
-    const metricasTexto = Object.entries(m)
-      .filter(([, v]) => v !== null && v !== undefined && v !== 0)
-      .map(([k, v]) => `${k}: ${v}`)
-      .join(', ') || '<span style="color:var(--text-muted);">Sin datos</span>';
+    const safeId = 'elem-' + idx;
+    _costoOriginal[safeId] = el.costo_total_ars;
 
+    // Fila principal
     const tr = document.createElement('tr');
-    tr.dataset.costo = el.costo_total_ars;
+    tr.dataset.costoActual = el.costo_total_ars;
+    tr.id = 'row-' + safeId;
     tr.innerHTML = `
       <td class="highlight">${el.nombre}</td>
       <td class="mono">${el.duracion_dias.toFixed(1)}</td>
-      <td class="mono" style="text-align:right;">${fmtARS(el.costo_total_ars)}</td>
+      <td class="mono" style="text-align:right;" id="costo-${safeId}">${fmtARS(el.costo_total_ars)}</td>
       <td style="text-align:right;">
         <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;">
           <div style="width:60px;background:rgba(255,255,255,0.06);border-radius:999px;height:5px;overflow:hidden;">
@@ -1434,27 +1440,163 @@ function renderComputo() {
           <span>${pct}%</span>
         </div>
       </td>
-      <td style="font-size:12px;color:var(--text-muted);">${metricasTexto}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <input type="number" class="correccion-input" value="${el.costo_total_ars.toFixed(0)}"
-            data-nombre="${el.nombre}"
-            style="width:110px;"
-            onchange="onCorreccionChange(this, '${el.nombre}')" />
-          <span class="badge azul correccion-flag" id="flag-${el.nombre.replace(/\s/g,'-')}" style="display:none;">Modificado</span>
-        </div>
+      <td style="text-align:center;">
+        <button class="btn" style="padding:3px 10px;font-size:11px;" onclick="toggleDetalle('${safeId}', this)">&#9654; Ver detalle</button>
       </td>
     `;
     tbody.appendChild(tr);
+
+    // Fila de detalle expandible
+    const m = el.metricas || {};
+    let inputsHTML = '';
+    METRICAS_FISICAS.forEach(clave => {
+      const valor = (m[clave] !== null && m[clave] !== undefined) ? m[clave] : '';
+      const unidad = clave.replace('_', ' ');
+      inputsHTML += `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <label style="width:110px;font-size:11px;color:var(--text-secondary);">${unidad}:</label>
+          <input type="number" step="any"
+            class="correccion-input"
+            id="input-${safeId}-${clave}"
+            data-safeId="${safeId}"
+            data-clave="${clave}"
+            data-original="${valor}"
+            value="${valor}"
+            placeholder="Sin datos"
+            style="width:100px;"
+            oninput="onMetricaChange('${safeId}', '${clave}', this)" />
+          <span style="font-size:11px;color:var(--text-muted);">${clave.includes('m3') ? 'm³' : clave.includes('kg') ? 'kg' : clave.includes('m2') ? 'm²' : clave.includes('ml') ? 'ml' : 'u'}</span>
+        </div>`;
+    });
+
+    const trDetalle = document.createElement('tr');
+    trDetalle.id = 'detalle-' + safeId;
+    trDetalle.style.display = 'none';
+    trDetalle.innerHTML = `
+      <td colspan="5" style="background:var(--bg-elevated);padding:14px 20px;">
+        <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;">
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--cyan);margin-bottom:10px;">Metricas fisicas</div>
+            ${inputsHTML || '<span style="color:var(--text-muted);font-size:12px;">Sin metricas disponibles</span>'}
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--amber);margin-bottom:10px;">Costo recalculado</div>
+            <div style="font-size:20px;font-weight:700;color:var(--text-primary);" id="costo-recalc-${safeId}">${fmtARS(el.costo_total_ars)}</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Original: ${fmtARS(el.costo_total_ars)}</div>
+            <span class="badge azul" id="flag-${safeId}" style="display:none;margin-top:8px;">Modificado</span>
+          </div>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(trDetalle);
   });
 
   document.getElementById('totalDias').textContent = totales.duracion_total_dias + ' d';
   document.getElementById('totalCosto').textContent = fmtARS(totales.costo_total_ars);
 }
 
-function onCorreccionChange(input, nombre) {
-  const flag = document.getElementById('flag-' + nombre.replace(/\s/g, '-'));
-  if (flag) flag.style.display = 'inline-flex';
+function toggleDetalle(safeId, btn) {
+  const det = document.getElementById('detalle-' + safeId);
+  if (!det) return;
+  const open = det.style.display !== 'none';
+  det.style.display = open ? 'none' : 'table-row';
+  btn.textContent = open ? '\u25B6 Ver detalle' : '\u25BC Ocultar';
+}
+
+function onMetricaChange(safeId, clave, input) {
+  const valorOriginal = parseFloat(input.dataset.original);
+  const valorNuevo = parseFloat(input.value);
+  const costoOrig = _costoOriginal[safeId];
+
+  const recalcEl = document.getElementById('costo-recalc-' + safeId);
+  const costoMainEl = document.getElementById('costo-' + safeId);
+  const flag = document.getElementById('flag-' + safeId);
+
+  if (!isNaN(valorNuevo) && !isNaN(valorOriginal) && valorOriginal !== 0) {
+    const costoNuevo = costoOrig * (valorNuevo / valorOriginal);
+    if (recalcEl) recalcEl.textContent = fmtARS(costoNuevo);
+    if (costoMainEl) costoMainEl.textContent = fmtARS(costoNuevo);
+    if (flag) flag.style.display = 'inline-flex';
+  } else {
+    if (recalcEl) recalcEl.textContent = fmtARS(costoOrig);
+    if (costoMainEl) costoMainEl.textContent = fmtARS(costoOrig);
+    if (flag) flag.style.display = 'none';
+  }
+}
+
+function exportarComputoHTML() {
+  const { elementos, totales } = COMPUTO_LOCAL;
+  const METRICAS_FISICAS = ['volumen_m3', 'acero_kg', 'encofrado_m2', 'longitud_ml', 'unidades'];
+
+  let filas = '';
+  elementos.forEach(el => {
+    const pct = totales.costo_total_ars > 0
+      ? (el.costo_total_ars / totales.costo_total_ars * 100).toFixed(1)
+      : '0.0';
+    const m = el.metricas || {};
+    const metricasStr = METRICAS_FISICAS
+      .filter(k => m[k] !== null && m[k] !== undefined && m[k] !== '')
+      .map(k => `${k.replace('_', ' ')}: ${m[k]}`)
+      .join(' | ') || '—';
+
+    filas += `<tr>
+      <td>${el.nombre}</td>
+      <td>${el.duracion_dias.toFixed(1)}</td>
+      <td style="text-align:right;">${fmtARS(el.costo_total_ars)}</td>
+      <td style="text-align:right;">${pct}%</td>
+      <td>${metricasStr}</td>
+    </tr>`;
+  });
+
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Computo de Materiales — Arch Proposal Suite</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 13px; padding: 32px; color: #111; }
+    h1 { font-size: 20px; margin-bottom: 4px; }
+    p.sub { color: #666; font-size: 11px; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #1a1a2e; color: #fff; padding: 8px 12px; text-align: left; font-size: 12px; }
+    td { padding: 7px 12px; border-bottom: 1px solid #e5e5e5; }
+    tr:last-child td { border-bottom: none; }
+    tfoot td { background: #f5f5f5; font-weight: bold; }
+    @media print { body { padding: 16px; } }
+  </style>
+</head>
+<body>
+  <h1>Computo de Materiales</h1>
+  <p class="sub">Generado: ${new Date().toLocaleString('es-AR')} — Arch Proposal Suite</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Elemento</th>
+        <th>Duracion (dias)</th>
+        <th style="text-align:right;">Costo ARS</th>
+        <th style="text-align:right;">% del total</th>
+        <th>Metricas fisicas</th>
+      </tr>
+    </thead>
+    <tbody>${filas}</tbody>
+    <tfoot>
+      <tr>
+        <td>TOTAL OBRA</td>
+        <td>${totales.duracion_total_dias} d</td>
+        <td style="text-align:right;">${fmtARS(totales.costo_total_ars)}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+  </table>
+</body>
+</html>`;
+
+  const ventana = window.open('', '_blank');
+  if (ventana) {
+    ventana.document.write(html);
+    ventana.document.close();
+  }
 }
 
 // ── ALERTAS ──────────────────────────────────────────────────────────────────

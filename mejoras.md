@@ -217,10 +217,10 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 ---
 
 ### 4.2 Agregar sección "Cómputo" en el dashboard del arquitecto
-- [ ] Tabla expandible por elemento con todas las cantidades físicas
-- [ ] Columnas: elemento, unidades, volumen/longitud/m2, acero kg, costo unitario, costo total
-- [ ] Botón "Corregir cantidad" que abre un campo editable → recalcula el costo en tiempo real
-- [ ] Exportar cómputo como HTML imprimible
+- [x] Tabla expandible por elemento con todas las cantidades físicas
+- [x] Columnas: elemento, unidades, volumen/longitud/m2, acero kg, costo unitario, costo total
+- [x] Botón "Corregir cantidad" que abre un campo editable → recalcula el costo en tiempo real
+- [x] Exportar cómputo como HTML imprimible
 
 ---
 
@@ -274,8 +274,8 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 ### 5.3 Actualizar workflow `cierre_semana.md`
 - [x] Leer `calendario_certificados.json` para identificar la semana vigente por fecha actual
 - [x] Usar el `presupuesto_teorico_ars` de esa semana (no el mock)
-- [ ] Al generar el certificado, actualizar `certificado_generado: true` y `archivo_certificado` con la ruta
-- [ ] Guardar snapshot en `outputs/documentacion/certificados/certificado_semana_N.html`
+- [x] Al generar el certificado, actualizar `certificado_generado: true` y `archivo_certificado` con la ruta
+- [x] Guardar snapshot en `outputs/documentacion/certificados/certificado_semana_N.html`
 
 ---
 
@@ -300,7 +300,7 @@ POST /api/gasto            → agrega gasto a gastos_reales en estado-proyecto.j
 POST /api/avance           → registra avance semanal
 ```
 
-- [ ] Al recibir POST, escribir nota en `memory/project_arch_proposal.md` con fecha y descripción del evento (para que Claude lo vea en la próxima sesión)
+- [x] Al recibir POST, escribir nota en `memory/project_arch_proposal.md` con fecha y descripción del evento (para que Claude lo vea en la próxima sesión)
 
 ---
 

@@ -1,7 +1,28 @@
 import os
 import json
+import shutil
 import argparse
+from pathlib import Path
 from datetime import datetime, date
+
+BASE_DIR = Path(__file__).parent.parent
+
+
+def actualizar_calendario(semana_numero: int, ruta_certificado: str):
+    """Actualiza calendario_certificados.json marcando el certificado como generado."""
+    calendario_path = BASE_DIR / "outputs" / "documentacion" / "calendario_certificados.json"
+    if not calendario_path.exists():
+        return
+    with calendario_path.open(encoding="utf-8") as f:
+        calendario = json.load(f)
+    for semana in calendario.get("semanas", []):
+        if semana["numero"] == semana_numero:
+            semana["certificado_generado"] = True
+            semana["archivo_certificado"] = str(ruta_certificado)
+            break
+    with calendario_path.open("w", encoding="utf-8") as f:
+        json.dump(calendario, f, ensure_ascii=False, indent=2)
+    print(f"[Calendario] Semana {semana_numero} marcada como certificada.")
 
 def load_json(ruta):
     """Carga segura de JSON"""
@@ -137,6 +158,16 @@ def generate_weekly_certificate(semana_objetivo, ruta_gastos, ruta_presupuesto, 
     os.makedirs(os.path.dirname(ruta_salida), exist_ok=True)
     with open(ruta_salida, 'w', encoding='utf-8') as f:
         f.write(md)
+
+    # Snapshot: copiar a outputs/documentacion/certificados/certificado_semana_N.html
+    certs_dir = BASE_DIR / "outputs" / "documentacion" / "certificados"
+    certs_dir.mkdir(parents=True, exist_ok=True)
+    snapshot_path = certs_dir / f"certificado_semana_{semana_objetivo}.html"
+    shutil.copy2(ruta_salida, snapshot_path)
+    print(f"[Snapshot] Certificado copiado en: {snapshot_path}")
+
+    # Actualizar calendario_certificados.json
+    actualizar_calendario(semana_objetivo, str(snapshot_path))
 
 def main():
     parser = argparse.ArgumentParser(description="Genera el Certificado de Obra cruzando costos y cronograma")
