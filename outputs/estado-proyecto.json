@@ -1,10 +1,28 @@
 {
+  "metadatos": {
+    "nombre_proyecto": "Arch Proposal Suite",
+    "version": "2.0",
+    "fecha_creacion": "2026-03-21",
+    "ultima_actualizacion": "2026-03-21"
+  },
+  "metricas_base": {
+    "superficie_m2": null,
+    "ubicacion": null,
+    "tipo_obra": null,
+    "personal": {
+      "oficiales": 3,
+      "ayudantes": 3
+    }
+  },
   "archivos_generados": {
     "cronogramas": [
-      "/mnt/d/Soy Leo/agentes-group/arch-proposal-suite/outputs/cronograma_obra_completa.json"
+      "outputs/cronograma_obra_completa.json"
     ],
     "presupuestos": [],
-    "ultimo_cronograma": "/mnt/d/Soy Leo/agentes-group/arch-proposal-suite/outputs/cronograma_obra_completa.json",
+    "ultimo_cronograma": "outputs/cronograma_obra_completa.json",
     "ultimo_presupuesto": null
-  }
+  },
+  "gastos_reales": [],
+  "avances": [],
+  "semaforo": "verde"
 }
