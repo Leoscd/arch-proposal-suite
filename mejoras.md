@@ -340,7 +340,7 @@ POST /api/avance           → registra avance semanal
 ## FASE 7 — Estructura de Carpetas Final
 > Reorganizar outputs para que toda la documentación técnica quede ordenada.
 
-### 7.1 Nueva estructura de `outputs/`
+### 7.1 Nueva estructura de `outputs/` ✓
 ```
 outputs/
 ├── documentacion/
@@ -367,9 +367,9 @@ outputs/
     └── semana_2.json
 ```
 
-- [ ] Actualizar todas las referencias de rutas en los scripts Python
-- [ ] Actualizar `CLAUDE.md` con las nuevas rutas
-- [ ] Agregar `.gitignore` entries para `sesion_activa.json` (es temporal, no debe commitearse)
+- [x] Actualizar todas las referencias de rutas en los scripts Python
+- [x] Actualizar `CLAUDE.md` con las nuevas rutas
+- [x] Agregar `.gitignore` entries para `sesion_activa.json` (es temporal, no debe commitearse)
 
 ---
 

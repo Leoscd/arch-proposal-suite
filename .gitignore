@@ -27,3 +27,6 @@ Thumbs.db
 # Archivos de sesión temporales (no commitear)
 outputs/sesion_activa.json
 outputs/auditoria_scope.json
+
+# Snapshots opcionales — no trackear en git
+outputs/snapshots/

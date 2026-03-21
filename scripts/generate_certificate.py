@@ -151,8 +151,8 @@ def main():
     # Los siguientes no existen aún realmente, es la interfaz para el futuro
     ruta_presu = os.path.join(out_dir, "presupuesto_referencia.json")
     ruta_crono = os.path.join(out_dir, "cronograma.json")
-    
-    ruta_salida = os.path.join(out_dir, f"certificado_semana_{args.semana}.md")
+
+    ruta_salida = os.path.join(out_dir, "documentacion", "certificados", f"certificado_semana_{args.semana}.md")
     
     try:
         generate_weekly_certificate(args.semana, ruta_gastos, ruta_presu, ruta_crono, ruta_salida)
