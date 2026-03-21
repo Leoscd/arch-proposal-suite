@@ -170,9 +170,9 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 > Objetivo: mostrar cantidades físicas de cada elemento para auditoría y corrección.
 
 ### 4.1 Generar `outputs/documentacion/computo_materiales.json`
-- [ ] Extraer las cantidades de `presupuesto_[rubro].json` → campo `metricas` de cada ítem
-- [ ] Agregar cantidades de `estado-proyecto.json` → campo `cantidades_de_plano`
-- [ ] Consolidar en un único archivo de cómputo
+- [x] Extraer las cantidades de `presupuesto_[rubro].json` → campo `metricas` de cada ítem
+- [x] Agregar cantidades de `estado-proyecto.json` → campo `cantidades_de_plano`
+- [x] Consolidar en un único archivo de cómputo
 
 **Estructura esperada:**
 ```json

@@ -1,0 +1,158 @@
+{
+  "generado": "2026-03-21T03:17:01.350630+00:00",
+  "rubro": "OBRA_COMPLETA",
+  "elementos": [
+    {
+      "nombre": "Trabajos Preparatorios",
+      "duracion_dias": 1.0,
+      "costo_total_ars": 62157.96,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Cimientos y Fundaciones",
+      "duracion_dias": 7.0,
+      "costo_total_ars": 1700810.57,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Estructuras Resistentes",
+      "duracion_dias": 21.6,
+      "costo_total_ars": 8901522.61,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Cerramientos",
+      "duracion_dias": 10.8,
+      "costo_total_ars": 3611683.89,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Aislaciones",
+      "duracion_dias": 1.0,
+      "costo_total_ars": 132454.62,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Revoques",
+      "duracion_dias": 15.0,
+      "costo_total_ars": 3507838.24,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Contrapisos y Carpetas",
+      "duracion_dias": 2.4,
+      "costo_total_ars": 1138811.3,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Pisos, Zócalos y Revestimientos",
+      "duracion_dias": 4.7,
+      "costo_total_ars": 1632357.09,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Cielorrasos",
+      "duracion_dias": 2.8,
+      "costo_total_ars": 482571.38,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Instalaciones",
+      "duracion_dias": 3.7,
+      "costo_total_ars": 684712.82,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    },
+    {
+      "nombre": "Pinturas y Tratamientos",
+      "duracion_dias": 7.4,
+      "costo_total_ars": 1601514.96,
+      "metricas": {
+        "volumen_m3": null,
+        "acero_kg": null,
+        "encofrado_m2": null,
+        "longitud_ml": null,
+        "area_m2": null,
+        "unidades": null
+      }
+    }
+  ],
+  "totales": {
+    "costo_total_ars": 23456435.44,
+    "duracion_total_dias": 77.4,
+    "hormigon_m3": 0,
+    "acero_total_kg": 0,
+    "encofrado_m2": 0,
+    "longitud_total_ml": 0,
+    "area_total_m2": 0
+  }
+}
