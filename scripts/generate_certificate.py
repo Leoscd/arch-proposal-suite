@@ -1,7 +1,7 @@
 import os
 import json
 import argparse
-from datetime import datetime
+from datetime import datetime, date
 
 def load_json(ruta):
     """Carga segura de JSON"""
@@ -17,6 +17,53 @@ def m(val):
     """Formateo de moneda ARS"""
     return f"$ {val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
+def calcular_curva_s(cronograma: dict) -> dict:
+    """
+    Calcula cuánto presupuesto teórico corresponde a cada semana.
+    Itera las tareas del cronograma, identifica en qué semana(s) cae cada una
+    por fecha_inicio/fecha_fin, y distribuye el costo_total_ars proporcionalmente.
+
+    Retorna: {"semana_1": monto, "semana_2": monto, ...}
+    """
+    tareas = cronograma.get("tareas", [])
+    if not tareas:
+        return {}
+
+    # Determinar fecha inicio del proyecto
+    fecha_inicio_str = cronograma.get("configuracion", {}).get("fecha_inicio")
+    if fecha_inicio_str:
+        fecha_inicio_proyecto = date.fromisoformat(fecha_inicio_str)
+    else:
+        # Usar la fecha mínima de inicio entre todas las tareas
+        fechas = [date.fromisoformat(t["inicio"]) for t in tareas if t.get("inicio")]
+        if not fechas:
+            return {}
+        fecha_inicio_proyecto = min(fechas)
+
+    curva = {}
+    for tarea in tareas:
+        inicio_str = tarea.get("inicio")
+        fin_str = tarea.get("fin")
+        costo = tarea.get("costo_total_ars", 0.0)
+        if not inicio_str or not fin_str or costo == 0:
+            continue
+
+        fecha_inicio_tarea = date.fromisoformat(inicio_str)
+        fecha_fin_tarea = date.fromisoformat(fin_str)
+
+        semana_inicio = (fecha_inicio_tarea - fecha_inicio_proyecto).days // 7 + 1
+        semana_fin = (fecha_fin_tarea - fecha_inicio_proyecto).days // 7 + 1
+
+        n_semanas = semana_fin - semana_inicio + 1
+        costo_por_semana = costo / n_semanas
+
+        for s in range(semana_inicio, semana_fin + 1):
+            clave = f"semana_{s}"
+            curva[clave] = curva.get(clave, 0.0) + costo_por_semana
+
+    return curva
+
+
 def generate_weekly_certificate(semana_objetivo, ruta_gastos, ruta_presupuesto, ruta_cronograma, ruta_salida):
     """
     Genera el cruce entre los gastos reales y el presupuesto teórico.
@@ -25,11 +72,12 @@ def generate_weekly_certificate(semana_objetivo, ruta_gastos, ruta_presupuesto, 
     
     # 1. Cargar Datos
     gastos_db = load_json(ruta_gastos).get("gastos", [])
-    
-    # MOCK: Como calcular_budget.py y generate_schedule.py aún no escupen el JSON consolidado final,
-    # simularemos un presupuesto semanal teórico para efectos de la demostración arquitectónica.
-    # En producción real, esto leerá los diccionarios reales de esos scripts.
-    presupuesto_teorico_semanal = 1500000.00  # 1.5M ARS teóricos esperados para una semana promedio
+
+    # Calcular presupuesto teórico semanal desde la curva S del cronograma
+    cronograma = load_json(ruta_cronograma)
+    curva_s = calcular_curva_s(cronograma)
+    clave_semana = f"semana_{semana_objetivo}"
+    presupuesto_teorico_semanal = curva_s.get(clave_semana, 0.0)
     
     # 2. Filtrar Gastos (Acá en prod filtraríamos por fecha coincidente con la "Semana X")
     # Para la demo, tomaremos todos los tickets ingresados como parte de este periodo.

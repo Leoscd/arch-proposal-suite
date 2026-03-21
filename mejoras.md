@@ -228,8 +228,8 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 > Objetivo: calcular cuánto presupuesto teórico corresponde a cada semana y generar los certificados correctamente.
 
 ### 5.1 Corregir `scripts/generate_certificate.py`
-- [ ] Eliminar el mock hardcodeado de `presupuesto_teorico_semanal = 1500000.00`
-- [ ] Implementar `calcular_curva_s(cronograma, presupuesto)`:
+- [x] Eliminar el mock hardcodeado de `presupuesto_teorico_semanal = 1500000.00`
+- [x] Implementar `calcular_curva_s(cronograma, presupuesto)`:
   - Itera las tareas del cronograma
   - Calcula en qué semana(s) cae cada tarea por fecha de inicio/fin
   - Distribuye el `costo_total_ars` de cada tarea proporcionalmente entre las semanas que ocupa
@@ -238,8 +238,8 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 ---
 
 ### 5.2 Crear `outputs/documentacion/calendario_certificados.json`
-- [ ] Se genera automáticamente al finalizar el cronograma
-- [ ] Una entrada por semana con: fechas, presupuesto teórico, tareas activas, estado del certificado
+- [x] Se genera automáticamente al finalizar el cronograma
+- [x] Una entrada por semana con: fechas, presupuesto teórico, tareas activas, estado del certificado
 
 **Estructura:**
 ```json
@@ -272,8 +272,8 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 ---
 
 ### 5.3 Actualizar workflow `cierre_semana.md`
-- [ ] Leer `calendario_certificados.json` para identificar la semana vigente por fecha actual
-- [ ] Usar el `presupuesto_teorico_ars` de esa semana (no el mock)
+- [x] Leer `calendario_certificados.json` para identificar la semana vigente por fecha actual
+- [x] Usar el `presupuesto_teorico_ars` de esa semana (no el mock)
 - [ ] Al generar el certificado, actualizar `certificado_generado: true` y `archivo_certificado` con la ruta
 - [ ] Guardar snapshot en `outputs/documentacion/certificados/certificado_semana_N.html`
 

@@ -1,0 +1,80 @@
+{
+  "generado": "2026-03-21T00:18:16.919557",
+  "rubros_incluidos": [
+    "TODOS"
+  ],
+  "total_semanas": 5,
+  "fecha_inicio_proyecto": "2026-03-21",
+  "semanas": [
+    {
+      "numero": 1,
+      "fecha_inicio": "2026-03-21",
+      "fecha_fin": "2026-03-27",
+      "presupuesto_teorico_ars": 7768485.43,
+      "tareas_activas": [
+        "01_TRABAJOS_PREPARATORIOS — Trabajos Preparatorios",
+        "02_CIMIENTOS_Y_FUNDACIONES — Cimientos y Fundaciones",
+        "03_ESTRUCTURAS — Estructuras Resistentes",
+        "04_CERRAMIENTOS — Cerramientos",
+        "05_AISLACIONES — Aislaciones",
+        "07_REVOQUES — Revoques",
+        "10_CIELORRASOS — Cielorrasos",
+        "11_INSTALACIONES — Instalaciones",
+        "13_PINTURAS — Pinturas y Tratamientos"
+      ],
+      "certificado_generado": false,
+      "archivo_certificado": null
+    },
+    {
+      "numero": 2,
+      "fecha_inicio": "2026-03-28",
+      "fecha_fin": "2026-04-03",
+      "presupuesto_teorico_ars": 7545399.95,
+      "tareas_activas": [
+        "02_CIMIENTOS_Y_FUNDACIONES — Cimientos y Fundaciones",
+        "03_ESTRUCTURAS — Estructuras Resistentes",
+        "04_CERRAMIENTOS — Cerramientos",
+        "07_REVOQUES — Revoques",
+        "08_CONTRAPISOS_CARPETAS — Contrapisos y Carpetas",
+        "13_PINTURAS — Pinturas y Tratamientos"
+      ],
+      "certificado_generado": false,
+      "archivo_certificado": null
+    },
+    {
+      "numero": 3,
+      "fecha_inicio": "2026-04-04",
+      "fecha_fin": "2026-04-10",
+      "presupuesto_teorico_ars": 4581941.03,
+      "tareas_activas": [
+        "03_ESTRUCTURAS — Estructuras Resistentes",
+        "07_REVOQUES — Revoques",
+        "09_PISOS — Pisos, Zócalos y Revestimientos"
+      ],
+      "certificado_generado": false,
+      "archivo_certificado": null
+    },
+    {
+      "numero": 4,
+      "fecha_inicio": "2026-04-11",
+      "fecha_fin": "2026-04-17",
+      "presupuesto_teorico_ars": 1780304.52,
+      "tareas_activas": [
+        "03_ESTRUCTURAS — Estructuras Resistentes"
+      ],
+      "certificado_generado": false,
+      "archivo_certificado": null
+    },
+    {
+      "numero": 5,
+      "fecha_inicio": "2026-04-18",
+      "fecha_fin": "2026-04-24",
+      "presupuesto_teorico_ars": 1780304.52,
+      "tareas_activas": [
+        "03_ESTRUCTURAS — Estructuras Resistentes"
+      ],
+      "certificado_generado": false,
+      "archivo_certificado": null
+    }
+  ]
+}
