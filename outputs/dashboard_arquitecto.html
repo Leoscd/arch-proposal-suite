@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Director de Obra — Arch Proposal Suite</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-base:        #0d1117;
+      --bg-sidebar:     #080c10;
+      --bg-surface:     #131920;
+      --bg-elevated:    #1a2332;
+      --bg-card:        #1e2a3a;
+      --border:         rgba(100, 160, 220, 0.15);
+      --border-strong:  rgba(100, 160, 220, 0.30);
+      --blue:           #3b82f6;
+      --blue-dim:       rgba(59, 130, 246, 0.15);
+      --cyan:           #06b6d4;
+      --cyan-dim:       rgba(6, 182, 212, 0.12);
+      --green:          #22c55e;
+      --green-dim:      rgba(34, 197, 94, 0.12);
+      --amber:          #f59e0b;
+      --amber-dim:      rgba(245, 158, 11, 0.12);
+      --red:            #ef4444;
+      --red-dim:        rgba(239, 68, 68, 0.12);
+      --orange:         #f97316;
+      --orange-dim:     rgba(249, 115, 22, 0.12);
+      --text-primary:   #e2e8f0;
+      --text-secondary: #94a3b8;
+      --text-muted:     #64748b;
+      --text-accent:    #7dd3fc;
+      --radius:         10px;
+      --radius-sm:      6px;
+      --shadow:         0 4px 24px rgba(0,0,0,0.5);
+      --font:           system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --sidebar-w:      220px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 20px 18px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo .logo-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-logo .logo-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 0;
+    }
+
+    .nav-section {
+      padding: 6px 14px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: var(--text-accent);
+      background: var(--blue-dim);
+      border-left-color: var(--blue);
+    }
+
+    .nav-icon {
+      width: 16px;
+      text-align: center;
+      font-style: normal;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .sidebar-footer .status-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    .sidebar-footer .status-dot.online { background: var(--green); }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-project {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .header-separator {
+      color: var(--text-muted);
+      font-size: 18px;
+    }
+
+    .header-role {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(6,182,212,0.25);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-feature-settings: "tnum";
+    }
+
+    .server-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      background: var(--bg-card);
+    }
+
+    .server-badge .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+    }
+
+    .server-badge.online .dot { background: var(--green); }
+    .server-badge.online { border-color: rgba(34,197,94,0.3); color: var(--green); }
+
+    /* ── CONTENT ── */
+    .content {
+      padding: 28px 32px 48px;
+      flex: 1;
+    }
+
+    /* ── SERVER OFFLINE BANNER ── */
+    .offline-banner {
+      background: var(--amber-dim);
+      border: 1px solid rgba(245,158,11,0.35);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      display: none;
+    }
+
+    .offline-banner.visible { display: flex; align-items: flex-start; gap: 14px; }
+
+    .offline-banner .icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+
+    .offline-banner .text-title {
+      font-weight: 600;
+      color: var(--amber);
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .offline-banner .text-body {
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+
+    .offline-banner code {
+      background: rgba(0,0,0,0.3);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--amber);
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── GRID ── */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .col-full { grid-column: 1 / -1; }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .card-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-feature-settings: "tnum";
+      line-height: 1.2;
+    }
+
+    .card-value.lg { font-size: 28px; }
+    .card-value.sm { font-size: 18px; }
+
+    .card-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .badge.verde  { background: var(--green-dim);  color: var(--green);  border: 1px solid rgba(34,197,94,0.25); }
+    .badge.amarillo { background: var(--amber-dim);  color: var(--amber);  border: 1px solid rgba(245,158,11,0.25); }
+    .badge.rojo   { background: var(--red-dim);    color: var(--red);    border: 1px solid rgba(239,68,68,0.25); }
+    .badge.azul   { background: var(--blue-dim);   color: var(--blue);   border: 1px solid rgba(59,130,246,0.25); }
+    .badge.cyan   { background: var(--cyan-dim);   color: var(--cyan);   border: 1px solid rgba(6,182,212,0.25); }
+    .badge.naranja { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(249,115,22,0.25); }
+
+    /* ── PROGRESS BAR ── */
+    .progress-bar-wrap {
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      height: 10px;
+      overflow: hidden;
+      margin: 12px 0 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--blue), var(--cyan));
+      transition: width 0.6s ease;
+    }
+
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ── SEMANA ACTIVA ── */
+    .semana-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .semana-numero {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--cyan);
+      line-height: 1;
+    }
+
+    .semana-rango {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .task-list { list-style: none; }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      margin-bottom: 6px;
+      background: var(--bg-elevated);
+      font-size: 13px;
+    }
+
+    .task-item:last-child { margin-bottom: 0; }
+
+    .task-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .task-dot.pendiente  { background: var(--text-muted); }
+    .task-dot.en-curso   { background: var(--amber); box-shadow: 0 0 6px rgba(245,158,11,0.5); }
+    .task-dot.terminado  { background: var(--green); }
+    .task-dot.critico    { background: var(--red); box-shadow: 0 0 6px rgba(239,68,68,0.5); }
+
+    .task-name {
+      flex: 1;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .task-badge { font-size: 10px; }
+
+    /* ── FORMULARIOS ── */
+    .form-section {
+      margin-bottom: 28px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .form-grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      background: var(--bg-base);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 20px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #2563eb; transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-strong);
+    }
+
+    .btn-secondary:hover { color: var(--text-primary); border-color: var(--blue); }
+
+    .btn-cyan {
+      background: var(--cyan);
+      color: #000;
+    }
+
+    .btn-cyan:hover { background: #0891b2; }
+
+    .btn-sm {
+      padding: 5px 12px;
+      font-size: 11px;
+    }
+
+    /* ── CONFIRMACIONES ── */
+    .confirm-msg {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .confirm-msg.success {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-dim);
+      border: 1px solid rgba(34,197,94,0.3);
+      color: var(--green);
+    }
+
+    .confirm-msg.error {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--red-dim);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: var(--red);
+    }
+
+    /* ── TABLAS ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead {
+      background: var(--bg-elevated);
+    }
+
+    th {
+      padding: 10px 14px;
+      text-align: left;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(100,160,220,0.07);
+      color: var(--text-secondary);
+      vertical-align: middle;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover td { background: var(--bg-elevated); }
+
+    td.mono {
+      font-feature-settings: "tnum";
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+
+    td.highlight { color: var(--text-primary); font-weight: 600; }
+
+    td input[type="number"] {
+      width: 90px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: var(--bg-base);
+    }
+
+    /* ── ALERTAS ── */
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+    }
+
+    .alert-item:last-child { margin-bottom: 0; }
+
+    .alert-item.critico {
+      background: var(--red-dim);
+      border: 1px solid rgba(239,68,68,0.25);
+    }
+
+    .alert-item.desvio {
+      background: var(--orange-dim);
+      border: 1px solid rgba(249,115,22,0.25);
+    }
+
+    .alert-item.info {
+      background: var(--blue-dim);
+      border: 1px solid rgba(59,130,246,0.2);
+    }
+
+    .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    .alert-body { flex: 1; }
+
+    .alert-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
+    .alert-item.critico .alert-title { color: var(--red); }
+    .alert-item.desvio .alert-title  { color: var(--orange); }
+    .alert-item.info   .alert-title  { color: var(--blue); }
+
+    .alert-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      padding: 28px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      background: var(--bg-elevated);
+      border-radius: var(--radius-sm);
+      border: 1px dashed var(--border);
+    }
+
+    /* ── CERTIFICADO ── */
+    .cert-card {
+      background: linear-gradient(135deg, var(--bg-elevated), var(--bg-card));
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .cert-info .cert-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .cert-info .cert-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .cert-info .cert-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
+
+    .cert-cmd {
+      display: none;
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-sm);
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: var(--cyan);
+      letter-spacing: 0.03em;
+    }
+
+    .cert-cmd.visible { display: block; }
+
+    /* ── SPINNER ── */
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SEMAFORO ── */
+    .semaforo {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .semaforo-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      opacity: 0.3;
+      transition: opacity 0.3s, box-shadow 0.3s;
+    }
+
+    .semaforo-dot.active { opacity: 1; }
+    .semaforo-dot.verde  { background: var(--green); box-shadow: 0 0 10px rgba(34,197,94,0.6); }
+    .semaforo-dot.amarillo { background: var(--amber); box-shadow: 0 0 10px rgba(245,158,11,0.6); }
+    .semaforo-dot.rojo   { background: var(--red); box-shadow: 0 0 10px rgba(239,68,68,0.6); }
+
+    .semaforo-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-left: 6px;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .content { padding: 20px 16px 40px; }
+    }
+
+    @media (max-width: 600px) {
+      .grid-3 { grid-template-columns: 1fr; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+      .cert-card { flex-direction: column; align-items: flex-start; }
+      .header { padding: 0 16px; }
+    }
+
+    /* ── SKELETON ── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-card) 50%, var(--bg-elevated) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-pulse 1.4s ease infinite;
+      border-radius: 4px;
+      height: 20px;
+    }
+
+    @keyframes skeleton-pulse {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 28px 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <span class="logo-label">Arch Proposal Suite</span>
+    <span class="logo-title">Panel Director<br>de Obra</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">Resumen</div>
+    <a class="nav-item active" onclick="scrollTo('#resumen')">
+      <i class="nav-icon">&#9724;</i> Estado general
+    </a>
+    <a class="nav-item" onclick="scrollTo('#semana-activa')">
+      <i class="nav-icon">&#128197;</i> Semana activa
+    </a>
+
+    <div class="nav-section">Operaciones</div>
+    <a class="nav-item" onclick="scrollTo('#form-avance')">
+      <i class="nav-icon">&#9998;</i> Registrar avance
+    </a>
+    <a class="nav-item" onclick="scrollTo('#form-gasto')">
+      <i class="nav-icon">&#128196;</i> Cargar ticket
+    </a>
+    <a class="nav-item" onclick="scrollTo('#tickets')">
+      <i class="nav-icon">&#128220;</i> Tickets cargados
+    </a>
+
+    <div class="nav-section">Datos</div>
+    <a class="nav-item" onclick="scrollTo('#computo')">
+      <i class="nav-icon">&#128296;</i> Computo materiales
+    </a>
+    <a class="nav-item" onclick="scrollTo('#alertas')">
+      <i class="nav-icon">&#9888;</i> Alertas
+    </a>
+    <a class="nav-item" onclick="scrollTo('#certificado')">
+      <i class="nav-icon">&#128195;</i> Certificado
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <span class="status-dot" id="sidebarDot"></span>
+    <span id="sidebarStatus">Servidor offline</span>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <span class="header-project" id="headerProject">Cargando proyecto...</span>
+      <span class="header-separator">/</span>
+      <span class="header-role">Director de Obra</span>
+    </div>
+    <div class="header-right">
+      <span class="header-date" id="headerDate"></span>
+      <div class="server-badge" id="serverBadge">
+        <span class="dot"></span>
+        <span id="serverLabel">Verificando...</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- OFFLINE BANNER -->
+    <div class="offline-banner" id="offlineBanner">
+      <div class="icon">&#9888;</div>
+      <div>
+        <div class="text-title">Servidor de datos no disponible</div>
+        <div class="text-body">
+          Para acceder a los datos en tiempo real, iniciar el servidor con:<br>
+          <code>cd /mnt/d/Soy Leo/agentes-group/arch-proposal-suite &amp;&amp; python3 scripts/server.py</code>
+          <br><br>
+          El dashboard muestra datos locales del calendario y computo mientras el servidor no responda.
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCION: RESUMEN GENERAL -->
+    <div class="section-title" id="resumen">Estado general del proyecto</div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Avance fisico</div>
+        <div class="card-value" id="avancePct">—</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progBar" style="width:0%"></div>
+        </div>
+        <div class="progress-labels">
+          <span>0%</span>
+          <span id="progLabel">Cargando...</span>
+          <span>100%</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Presupuesto total obra</div>
+        <div class="card-value lg" id="totalPresupuesto">—</div>
+        <div class="card-sub">Costo estimado ARS</div>
+        <div class="semaforo" id="semaforo">
+          <div class="semaforo-dot verde" id="semVerde"></div>
+          <div class="semaforo-dot amarillo" id="semAmarillo"></div>
+          <div class="semaforo-dot rojo" id="semRojo"></div>
+          <span class="semaforo-label" id="semLabel">—</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Gastos reales acumulados</div>
+        <div class="card-value" id="gastosReales">—</div>
+        <div class="card-sub" id="desvioLabel">Desvio respecto al teorico</div>
+        <div style="margin-top:8px;">
+          <span class="badge" id="estadoBadge">Cargando</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">Duracion total</div>
+        <div class="card-value sm">35 dias habiles</div>
+        <div class="card-sub">Inicio: 21/03/2026 — Fin est.: 20/04/2026</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Camino critico</div>
+        <div style="margin-top:6px;">
+          <div class="badge rojo" style="margin-bottom:4px;">Estructuras Resistentes</div>
+        </div>
+        <div class="card-sub">1 tarea critica — holgura 0</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tickets cargados</div>
+        <div class="card-value" id="cantTickets">—</div>
+        <div class="card-sub">Comprobantes registrados</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCION: SEMANA ACTIVA -->
+    <div class="section-title" id="semana-activa">Semana activa</div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="semana-header">
+          <div>
+            <div class="card-title">Semana en curso</div>
+            <div class="semana-numero" id="semanaNum">—</div>
+            <div class="semana-rango" id="semanaRango">Calculando fecha...</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="card-title">Presupuesto teorico</div>
+            <div class="card-value sm" id="semanaPpto">—</div>
+            <div class="card-sub">ARS esta semana</div>
+          </div>
+        </div>
+        <div class="card-title" style="margin-top:12px;">Tareas activas esta semana</div>
+        <ul class="task-list" id="tareasActivas"></ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Cronograma de semanas</div>
+        <div style="overflow-x:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Sem.</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Presupuesto ARS</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tablaSemanas"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCION: FORMULARIO AVANCE -->
+    <div class="section-title" id="form-avance">Registrar avance semanal</div>
+
+    <div class="card form-section">
+      <div class="form-grid">
+        <div class="form-grid form-grid-2">
+          <div>
+            <label>Semana</label>
+            <input type="text" id="avanceSemana" readonly placeholder="Auto-detectado..." />
+          </div>
+          <div>
+            <label>% Completado</label>
+            <input type="number" id="avancePorcentaje" min="0" max="100" step="1" placeholder="0 – 100" />
+          </div>
+        </div>
+        <div>
+          <label>Descripcion del avance</label>
+          <textarea id="avanceDesc" placeholder="Describir los trabajos realizados, materiales utilizados, observaciones..."></textarea>
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="registrarAvance()">
+            <span>Registrar avance</span>
+          </button>
+        </div>
+      </div>
+      <div class="confirm-msg" id="avanceConfirm"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCION: FORMULARIO GASTO -->
+    <div class="section-title" id="form-gasto">Cargar ticket / factura</div>
+
+    <div class="card form-section">
+      <div class="form-grid">
+        <div class="form-grid form-grid-2">
+          <div>
+            <label>Emisor (proveedor)</label>
+            <input type="text" id="gastoEmisor" placeholder="Ferreteria, empresa, persona..." />
+          </div>
+          <div>
+            <label>Fecha del comprobante</label>
+            <input type="date" id="gastoFecha" />
+          </div>
+        </div>
+        <div>
+          <label>Materiales / concepto</label>
+          <textarea id="gastoMateriales" placeholder="Descripcion de materiales o servicios adquiridos..."></textarea>
+        </div>
+        <div>
+          <label>Monto ARS</label>
+          <input type="number" id="gastoMonto" min="0" step="0.01" placeholder="0.00" style="max-width:260px;" />
+        </div>
+        <div>
+          <button class="btn btn-primary" onclick="cargarGasto()">
+            <span>Cargar ticket</span>
+          </button>
+        </div>
+      </div>
+      <div class="confirm-msg" id="gastoConfirm"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCION: TICKETS CARGADOS -->
+    <div class="section-title" id="tickets">Tickets / facturas cargadas</div>
+
+    <div class="card" style="padding:0; margin-bottom:28px;">
+      <div id="tablaTicketsWrap">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Emisor</th>
+                <th>Materiales / concepto</th>
+                <th style="text-align:right;">Monto ARS</th>
+              </tr>
+            </thead>
+            <tbody id="tablaTickets">
+              <tr>
+                <td colspan="4">
+                  <div class="skeleton" style="margin:16px;"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCION: COMPUTO DE MATERIALES -->
+    <div class="section-title" id="computo">Computo de materiales</div>
+
+    <div class="card" style="padding:0; margin-bottom:28px;">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Rubro / elemento</th>
+              <th>Duracion (dias)</th>
+              <th style="text-align:right;">Costo ARS</th>
+              <th style="text-align:right;">% del total</th>
+              <th>Metricas</th>
+              <th>Corregir cantidad</th>
+            </tr>
+          </thead>
+          <tbody id="tablaComputo"></tbody>
+          <tfoot id="tfootComputo" style="background:var(--bg-elevated);">
+            <tr>
+              <td class="highlight">TOTAL OBRA</td>
+              <td class="mono highlight" id="totalDias">—</td>
+              <td class="mono highlight" style="text-align:right;" id="totalCosto">—</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCION: ALERTAS -->
+    <div class="section-title" id="alertas">Alertas de obra</div>
+
+    <div style="margin-bottom:28px;" id="alertasContainer">
+      <div class="skeleton" style="margin-bottom:8px; height:60px;"></div>
+      <div class="skeleton" style="height:60px;"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECCION: CERTIFICADO -->
+    <div class="section-title" id="certificado">Generacion de certificado</div>
+
+    <div class="cert-card">
+      <div class="cert-info">
+        <div class="cert-label">Certificado semanal</div>
+        <div class="cert-title" id="certTitle">Semana — en curso</div>
+        <div class="cert-sub" id="certSub">Presupuesto teorico: cargando...</div>
+      </div>
+      <div>
+        <button class="btn btn-cyan" id="btnCertificado" onclick="generarCertificado()">
+          Generar certificado semana <span id="certBtnNum">—</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="cert-cmd" id="certCmd"></div>
+
+  </main>
+</div>
+
+<script>
+// ── CONSTANTES ──────────────────────────────────────────────────────────────
+const API = 'http://localhost:8080/api';
+
+// Datos locales del calendario (fallback cuando el servidor no responde)
+const CALENDARIO_LOCAL = {"generado":"2026-03-21T00:18:16.919557","rubros_incluidos":["TODOS"],"total_semanas":5,"fecha_inicio_proyecto":"2026-03-21","semanas":[{"numero":1,"fecha_inicio":"2026-03-21","fecha_fin":"2026-03-27","presupuesto_teorico_ars":7768485.43,"tareas_activas":["01_TRABAJOS_PREPARATORIOS \u2014 Trabajos Preparatorios","02_CIMIENTOS_Y_FUNDACIONES \u2014 Cimientos y Fundaciones","03_ESTRUCTURAS \u2014 Estructuras Resistentes","04_CERRAMIENTOS \u2014 Cerramientos","05_AISLACIONES \u2014 Aislaciones","07_REVOQUES \u2014 Revoques","10_CIELORRASOS \u2014 Cielorrasos","11_INSTALACIONES \u2014 Instalaciones","13_PINTURAS \u2014 Pinturas y Tratamientos"],"certificado_generado":false,"archivo_certificado":null},{"numero":2,"fecha_inicio":"2026-03-28","fecha_fin":"2026-04-03","presupuesto_teorico_ars":7545399.95,"tareas_activas":["02_CIMIENTOS_Y_FUNDACIONES \u2014 Cimientos y Fundaciones","03_ESTRUCTURAS \u2014 Estructuras Resistentes","04_CERRAMIENTOS \u2014 Cerramientos","07_REVOQUES \u2014 Revoques","08_CONTRAPISOS_CARPETAS \u2014 Contrapisos y Carpetas","13_PINTURAS \u2014 Pinturas y Tratamientos"],"certificado_generado":false,"archivo_certificado":null},{"numero":3,"fecha_inicio":"2026-04-04","fecha_fin":"2026-04-10","presupuesto_teorico_ars":4581941.03,"tareas_activas":["03_ESTRUCTURAS \u2014 Estructuras Resistentes","07_REVOQUES \u2014 Revoques","09_PISOS \u2014 Pisos, Z\u00f3calos y Revestimientos"],"certificado_generado":false,"archivo_certificado":null},{"numero":4,"fecha_inicio":"2026-04-11","fecha_fin":"2026-04-17","presupuesto_teorico_ars":1780304.52,"tareas_activas":["03_ESTRUCTURAS \u2014 Estructuras Resistentes"],"certificado_generado":false,"archivo_certificado":null},{"numero":5,"fecha_inicio":"2026-04-18","fecha_fin":"2026-04-24","presupuesto_teorico_ars":1780304.52,"tareas_activas":["03_ESTRUCTURAS \u2014 Estructuras Resistentes"],"certificado_generado":false,"archivo_certificado":null}]};
+
+const COMPUTO_LOCAL = {"generado":"2026-03-21T03:17:01.350630+00:00","rubro":"OBRA_COMPLETA","elementos":[{"nombre":"Trabajos Preparatorios","duracion_dias":1.0,"costo_total_ars":62157.96,"metricas":{"volumen_m3":null,"acero_kg":null,"encofrado_m2":null,"longitud_ml":null,"area_m2":null,"unidades":null}},{"nombre":"Cimientos y Fundaciones","duracion_dias":7.0,"costo_total_ars":1700810.57,"metricas":{}},{"nombre":"Estructuras Resistentes","duracion_dias":21.6,"costo_total_ars":8901522.61,"metricas":{}},{"nombre":"Cerramientos","duracion_dias":10.8,"costo_total_ars":3611683.89,"metricas":{}},{"nombre":"Aislaciones","duracion_dias":1.0,"costo_total_ars":132454.62,"metricas":{}},{"nombre":"Revoques","duracion_dias":15.0,"costo_total_ars":3507838.24,"metricas":{}},{"nombre":"Contrapisos y Carpetas","duracion_dias":2.4,"costo_total_ars":1138811.30,"metricas":{}},{"nombre":"Pisos, Z\u00f3calos y Revestimientos","duracion_dias":4.7,"costo_total_ars":1632357.09,"metricas":{}},{"nombre":"Cielorrasos","duracion_dias":2.8,"costo_total_ars":482571.38,"metricas":{}},{"nombre":"Instalaciones","duracion_dias":3.7,"costo_total_ars":684712.82,"metricas":{}},{"nombre":"Pinturas y Tratamientos","duracion_dias":7.4,"costo_total_ars":1601514.96,"metricas":{}}],"totales":{"costo_total_ars":23456435.44,"duracion_total_dias":77.4}};
+
+// Estado global
+let serverOnline = false;
+let semanaActiva = null;
+let estadoData = null;
+
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+function fmtARS(n) {
+  if (n === null || n === undefined || isNaN(n)) return '—';
+  return new Intl.NumberFormat('es-AR', {
+    style: 'currency', currency: 'ARS', maximumFractionDigits: 0
+  }).format(n);
+}
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso + 'T12:00:00');
+  return d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function scrollTo(id) {
+  const el = document.querySelector(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function detectarSemanaActiva(semanas) {
+  const hoy = new Date();
+  hoy.setHours(12, 0, 0, 0);
+  for (const s of semanas) {
+    const ini = new Date(s.fecha_inicio + 'T12:00:00');
+    const fin = new Date(s.fecha_fin + 'T12:00:00');
+    if (hoy >= ini && hoy <= fin) return s;
+  }
+  // Si estamos antes del inicio o entre semanas, buscar la próxima
+  for (const s of semanas) {
+    const ini = new Date(s.fecha_inicio + 'T12:00:00');
+    if (hoy < ini) return s;
+  }
+  // Si ya pasaron todas, devolver la última
+  return semanas[semanas.length - 1];
+}
+
+function nombreTareaCorto(t) {
+  return t.split('—')[1] ? t.split('—')[1].trim() : t;
+}
+
+function esTareasCritica(nombre) {
+  return nombre.toLowerCase().includes('estructura');
+}
+
+// ── HEADER Y FECHA ───────────────────────────────────────────────────────────
+function initHeader() {
+  const hoy = new Date();
+  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('headerDate').textContent =
+    hoy.toLocaleDateString('es-AR', opts).replace(/^\w/, c => c.toUpperCase());
+}
+
+// ── VERIFICAR SERVIDOR ───────────────────────────────────────────────────────
+async function checkServer() {
+  try {
+    const r = await fetch(API + '/estado', { signal: AbortSignal.timeout(3000) });
+    if (r.ok) {
+      serverOnline = true;
+      setServerStatus(true);
+      estadoData = await r.json();
+      return estadoData;
+    }
+  } catch (_) {}
+  serverOnline = false;
+  setServerStatus(false);
+  return null;
+}
+
+function setServerStatus(online) {
+  const badge = document.getElementById('serverBadge');
+  const label = document.getElementById('serverLabel');
+  const sidebarDot = document.getElementById('sidebarDot');
+  const sidebarStatus = document.getElementById('sidebarStatus');
+  const banner = document.getElementById('offlineBanner');
+
+  if (online) {
+    badge.className = 'server-badge online';
+    label.textContent = 'API conectada';
+    sidebarDot.className = 'status-dot online';
+    sidebarStatus.textContent = 'Servidor online';
+    banner.classList.remove('visible');
+  } else {
+    badge.className = 'server-badge';
+    label.textContent = 'Servidor offline';
+    sidebarDot.className = 'status-dot';
+    sidebarStatus.textContent = 'Servidor offline';
+    banner.classList.add('visible');
+  }
+}
+
+// ── RESUMEN GENERAL ──────────────────────────────────────────────────────────
+function renderResumen(estado) {
+  const totalPpto = COMPUTO_LOCAL.totales.costo_total_ars;
+  document.getElementById('totalPresupuesto').textContent = fmtARS(totalPpto);
+
+  let gastosAcum = 0;
+  let cantTickets = 0;
+  let avancePct = 0;
+
+  if (estado && estado.gastos_reales) {
+    cantTickets = estado.gastos_reales.length;
+    gastosAcum = estado.gastos_reales.reduce((sum, g) => sum + (g.monto || 0), 0);
+  }
+
+  if (estado && estado.avance_pct !== undefined) {
+    avancePct = estado.avance_pct;
+  }
+
+  document.getElementById('cantTickets').textContent = cantTickets;
+  document.getElementById('gastosReales').textContent = fmtARS(gastosAcum);
+  document.getElementById('avancePct').textContent = avancePct.toFixed(0) + '%';
+  document.getElementById('progBar').style.width = Math.min(avancePct, 100) + '%';
+  document.getElementById('progLabel').textContent = avancePct.toFixed(0) + '%';
+
+  // Desvio
+  if (gastosAcum > 0 && totalPpto > 0) {
+    const desvio = ((gastosAcum - totalPpto) / totalPpto) * 100;
+    document.getElementById('desvioLabel').textContent =
+      (desvio >= 0 ? '+' : '') + desvio.toFixed(1) + '% vs presupuesto';
+  } else {
+    document.getElementById('desvioLabel').textContent = 'Sin gastos registrados';
+  }
+
+  // Semaforo financiero
+  const ratio = totalPpto > 0 ? gastosAcum / totalPpto : 0;
+  let semColor, semText, badgeClass, badgeText;
+
+  if (gastosAcum === 0) {
+    semColor = 'verde'; semText = 'Sin gastos'; badgeClass = 'azul'; badgeText = 'Sin datos';
+  } else if (ratio <= 0.80) {
+    semColor = 'verde'; semText = 'Dentro del presupuesto'; badgeClass = 'verde'; badgeText = 'Normal';
+  } else if (ratio <= 1.10) {
+    semColor = 'amarillo'; semText = 'Atencion — desvio moderado'; badgeClass = 'amarillo'; badgeText = 'Atencion';
+  } else {
+    semColor = 'rojo'; semText = 'Desvio critico — revisar'; badgeClass = 'rojo'; badgeText = 'Desvio';
+  }
+
+  document.getElementById('semVerde').className   = 'semaforo-dot verde'    + (semColor === 'verde' ? ' active' : '');
+  document.getElementById('semAmarillo').className = 'semaforo-dot amarillo' + (semColor === 'amarillo' ? ' active' : '');
+  document.getElementById('semRojo').className    = 'semaforo-dot rojo'     + (semColor === 'rojo' ? ' active' : '');
+  document.getElementById('semLabel').textContent = semText;
+
+  const badge = document.getElementById('estadoBadge');
+  badge.className = 'badge ' + badgeClass;
+  badge.textContent = badgeText;
+}
+
+// ── SEMANA ACTIVA ────────────────────────────────────────────────────────────
+function renderSemanaActiva() {
+  const semanas = CALENDARIO_LOCAL.semanas;
+  const semana = detectarSemanaActiva(semanas);
+  semanaActiva = semana;
+
+  document.getElementById('semanaNum').textContent = semana.numero;
+  document.getElementById('semanaRango').textContent =
+    fmtDate(semana.fecha_inicio) + ' — ' + fmtDate(semana.fecha_fin);
+  document.getElementById('semanaPpto').textContent = fmtARS(semana.presupuesto_teorico_ars);
+
+  // Campo semana en formulario avance
+  document.getElementById('avanceSemana').value = 'Semana ' + semana.numero;
+
+  // Tareas activas
+  const ul = document.getElementById('tareasActivas');
+  ul.innerHTML = '';
+  semana.tareas_activas.forEach(t => {
+    const nombre = nombreTareaCorto(t);
+    const critica = esTareasCritica(nombre);
+    const li = document.createElement('li');
+    li.className = 'task-item';
+    li.innerHTML = `
+      <span class="task-dot ${critica ? 'critico' : 'en-curso'}"></span>
+      <span class="task-name">${nombre}</span>
+      <span class="badge task-badge ${critica ? 'rojo' : 'amarillo'}">${critica ? 'CRITICA' : 'En curso'}</span>
+    `;
+    ul.appendChild(li);
+  });
+
+  // Tabla de semanas
+  const tbody = document.getElementById('tablaSemanas');
+  tbody.innerHTML = '';
+  semanas.forEach(s => {
+    const hoy = new Date();
+    hoy.setHours(12,0,0,0);
+    const ini = new Date(s.fecha_inicio + 'T12:00:00');
+    const fin = new Date(s.fecha_fin + 'T12:00:00');
+    const esActual = hoy >= ini && hoy <= fin;
+    const esPasada = hoy > fin;
+
+    const tr = document.createElement('tr');
+    if (esActual) tr.style.background = 'rgba(59,130,246,0.08)';
+
+    let estadoHtml;
+    if (s.certificado_generado) {
+      estadoHtml = '<span class="badge verde">Certificado</span>';
+    } else if (esPasada) {
+      estadoHtml = '<span class="badge rojo">Pendiente cert.</span>';
+    } else if (esActual) {
+      estadoHtml = '<span class="badge amarillo">En curso</span>';
+    } else {
+      estadoHtml = '<span class="badge azul">Programada</span>';
+    }
+
+    tr.innerHTML = `
+      <td class="highlight">${s.numero}</td>
+      <td>${fmtDate(s.fecha_inicio)}</td>
+      <td>${fmtDate(s.fecha_fin)}</td>
+      <td class="mono" style="text-align:right;">${fmtARS(s.presupuesto_teorico_ars)}</td>
+      <td>${estadoHtml}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Certificado
+  document.getElementById('certTitle').textContent = 'Semana ' + semana.numero + ' — en curso';
+  document.getElementById('certSub').textContent = 'Presupuesto teorico: ' + fmtARS(semana.presupuesto_teorico_ars);
+  document.getElementById('certBtnNum').textContent = semana.numero;
+}
+
+// ── TICKETS CARGADOS ─────────────────────────────────────────────────────────
+function renderTickets(estado) {
+  const tbody = document.getElementById('tablaTickets');
+  tbody.innerHTML = '';
+
+  const gastos = estado && estado.gastos_reales ? estado.gastos_reales : [];
+
+  if (gastos.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4">
+          <div class="empty-state">Sin tickets cargados</div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  gastos.forEach(g => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${fmtDate(g.fecha || g.date)}</td>
+      <td class="highlight">${g.emisor || g.proveedor || '—'}</td>
+      <td style="max-width:260px; white-space:pre-wrap; word-break:break-word;">${g.materiales || g.concepto || '—'}</td>
+      <td class="mono" style="text-align:right; color:var(--amber);">${fmtARS(g.monto)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// ── COMPUTO MATERIALES ───────────────────────────────────────────────────────
+function renderComputo() {
+  const { elementos, totales } = COMPUTO_LOCAL;
+  const tbody = document.getElementById('tablaComputo');
+  tbody.innerHTML = '';
+
+  elementos.forEach(el => {
+    const pct = totales.costo_total_ars > 0
+      ? (el.costo_total_ars / totales.costo_total_ars * 100).toFixed(1)
+      : '0.0';
+
+    // Metricas disponibles
+    const m = el.metricas || {};
+    const metricasTexto = Object.entries(m)
+      .filter(([, v]) => v !== null && v !== undefined && v !== 0)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join(', ') || '<span style="color:var(--text-muted);">Sin datos</span>';
+
+    const tr = document.createElement('tr');
+    tr.dataset.costo = el.costo_total_ars;
+    tr.innerHTML = `
+      <td class="highlight">${el.nombre}</td>
+      <td class="mono">${el.duracion_dias.toFixed(1)}</td>
+      <td class="mono" style="text-align:right;">${fmtARS(el.costo_total_ars)}</td>
+      <td style="text-align:right;">
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;">
+          <div style="width:60px;background:rgba(255,255,255,0.06);border-radius:999px;height:5px;overflow:hidden;">
+            <div style="width:${pct}%;height:100%;background:var(--blue);border-radius:999px;"></div>
+          </div>
+          <span>${pct}%</span>
+        </div>
+      </td>
+      <td style="font-size:12px;color:var(--text-muted);">${metricasTexto}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="number" class="correccion-input" value="${el.costo_total_ars.toFixed(0)}"
+            data-nombre="${el.nombre}"
+            style="width:110px;"
+            onchange="onCorreccionChange(this, '${el.nombre}')" />
+          <span class="badge azul correccion-flag" id="flag-${el.nombre.replace(/\s/g,'-')}" style="display:none;">Modificado</span>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('totalDias').textContent = totales.duracion_total_dias + ' d';
+  document.getElementById('totalCosto').textContent = fmtARS(totales.costo_total_ars);
+}
+
+function onCorreccionChange(input, nombre) {
+  const flag = document.getElementById('flag-' + nombre.replace(/\s/g, '-'));
+  if (flag) flag.style.display = 'inline-flex';
+}
+
+// ── ALERTAS ──────────────────────────────────────────────────────────────────
+function renderAlertas(estado) {
+  const container = document.getElementById('alertasContainer');
+  container.innerHTML = '';
+
+  const alertas = [];
+
+  // Alerta camino critico
+  alertas.push({
+    tipo: 'critico',
+    icon: '&#9888;',
+    title: 'Tarea en camino critico: Estructuras Resistentes',
+    desc: 'Holgura = 0 dias. Cualquier retraso impacta directamente la fecha de fin del proyecto (20/04/2026).'
+  });
+
+  // Alertas desvio financiero
+  if (estado && estado.gastos_reales && estado.gastos_reales.length > 0) {
+    const totalGastos = estado.gastos_reales.reduce((s, g) => s + (g.monto || 0), 0);
+    const totalPpto = COMPUTO_LOCAL.totales.costo_total_ars;
+    const desvio = totalPpto > 0 ? (totalGastos - totalPpto) / totalPpto : 0;
+
+    if (Math.abs(desvio) > 0.10) {
+      alertas.push({
+        tipo: 'desvio',
+        icon: '&#128200;',
+        title: 'Desvio financiero > 10%: ' + (desvio > 0 ? '+' : '') + (desvio * 100).toFixed(1) + '%',
+        desc: `Gastos acumulados: ${fmtARS(totalGastos)} vs presupuesto total: ${fmtARS(totalPpto)}.`
+      });
+    }
+
+    // Semana activa — desvio semanal
+    if (semanaActiva) {
+      // gastos de la semana activa (si tienen fecha)
+      const ini = new Date(semanaActiva.fecha_inicio + 'T00:00:00');
+      const fin = new Date(semanaActiva.fecha_fin + 'T23:59:59');
+      const gastosSemana = estado.gastos_reales.filter(g => {
+        const gFecha = new Date(g.fecha || g.date || '2000-01-01');
+        return gFecha >= ini && gFecha <= fin;
+      });
+      const totalGastosSemana = gastosSemana.reduce((s, g) => s + (g.monto || 0), 0);
+      const pptoSemana = semanaActiva.presupuesto_teorico_ars;
+      const desvioSemana = pptoSemana > 0 ? (totalGastosSemana - pptoSemana) / pptoSemana : 0;
+
+      if (gastosSemana.length > 0 && Math.abs(desvioSemana) > 0.10) {
+        alertas.push({
+          tipo: 'desvio',
+          icon: '&#128203;',
+          title: 'Desvio semana ' + semanaActiva.numero + ': ' + (desvioSemana * 100).toFixed(1) + '%',
+          desc: `Gastos semana: ${fmtARS(totalGastosSemana)} vs teorico: ${fmtARS(pptoSemana)}.`
+        });
+      }
+    }
+  } else if (!serverOnline) {
+    alertas.push({
+      tipo: 'info',
+      icon: '&#8505;',
+      title: 'Sin datos de gastos disponibles',
+      desc: 'El servidor esta offline. Iniciar la API para verificar desvios financieros en tiempo real.'
+    });
+  }
+
+  if (alertas.length === 0) {
+    container.innerHTML = '<div class="empty-state">Sin alertas activas</div>';
+    return;
+  }
+
+  alertas.forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'alert-item ' + a.tipo;
+    div.innerHTML = `
+      <span class="alert-icon">${a.icon}</span>
+      <div class="alert-body">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-desc">${a.desc}</div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ── POST AVANCE ──────────────────────────────────────────────────────────────
+async function registrarAvance() {
+  const semana = document.getElementById('avanceSemana').value;
+  const desc = document.getElementById('avanceDesc').value.trim();
+  const pct = document.getElementById('avancePorcentaje').value;
+  const msg = document.getElementById('avanceConfirm');
+
+  if (!desc) {
+    showMsg(msg, 'error', '&#9888; Completar la descripcion del avance.');
+    return;
+  }
+  if (!pct) {
+    showMsg(msg, 'error', '&#9888; Ingresar el porcentaje completado.');
+    return;
+  }
+
+  if (!serverOnline) {
+    showMsg(msg, 'error', '&#9888; Servidor offline. No es posible registrar el avance. Iniciar la API primero.');
+    return;
+  }
+
+  const body = { semana, descripcion: desc, porcentaje_completado: parseFloat(pct) };
+
+  try {
+    const r = await fetch(API + '/avance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (r.ok) {
+      showMsg(msg, 'success', '&#10003; Avance registrado correctamente — ' + semana + ' (' + pct + '%)');
+      document.getElementById('avanceDesc').value = '';
+      document.getElementById('avancePorcentaje').value = '';
+    } else {
+      const err = await r.text();
+      showMsg(msg, 'error', '&#9888; Error al registrar: ' + err);
+    }
+  } catch (e) {
+    showMsg(msg, 'error', '&#9888; No se pudo conectar con la API: ' + e.message);
+  }
+}
+
+// ── POST GASTO ───────────────────────────────────────────────────────────────
+async function cargarGasto() {
+  const emisor = document.getElementById('gastoEmisor').value.trim();
+  const fecha = document.getElementById('gastoFecha').value;
+  const materiales = document.getElementById('gastoMateriales').value.trim();
+  const monto = document.getElementById('gastoMonto').value;
+  const msg = document.getElementById('gastoConfirm');
+
+  if (!emisor || !fecha || !materiales || !monto) {
+    showMsg(msg, 'error', '&#9888; Completar todos los campos antes de cargar el ticket.');
+    return;
+  }
+
+  if (!serverOnline) {
+    showMsg(msg, 'error', '&#9888; Servidor offline. No es posible cargar el ticket. Iniciar la API primero.');
+    return;
+  }
+
+  const body = {
+    emisor,
+    fecha,
+    materiales,
+    monto: parseFloat(monto)
+  };
+
+  try {
+    const r = await fetch(API + '/gasto', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (r.ok) {
+      showMsg(msg, 'success', '&#10003; Ticket cargado correctamente — ' + fmtARS(parseFloat(monto)) + ' de ' + emisor);
+      document.getElementById('gastoEmisor').value = '';
+      document.getElementById('gastoFecha').value = '';
+      document.getElementById('gastoMateriales').value = '';
+      document.getElementById('gastoMonto').value = '';
+      // Recargar estado para actualizar tabla de tickets
+      const nuevoEstado = await fetch(API + '/estado').then(r => r.json()).catch(() => null);
+      if (nuevoEstado) {
+        renderTickets(nuevoEstado);
+        renderResumen(nuevoEstado);
+        renderAlertas(nuevoEstado);
+      }
+    } else {
+      const err = await r.text();
+      showMsg(msg, 'error', '&#9888; Error al cargar: ' + err);
+    }
+  } catch (e) {
+    showMsg(msg, 'error', '&#9888; No se pudo conectar con la API: ' + e.message);
+  }
+}
+
+// ── CERTIFICADO ──────────────────────────────────────────────────────────────
+function generarCertificado() {
+  const n = semanaActiva ? semanaActiva.numero : '?';
+  const cmd = document.getElementById('certCmd');
+  cmd.textContent = '$ python3 scripts/generate_certificate.py --semana ' + n;
+  cmd.classList.add('visible');
+
+  // Highlight temporal del boton
+  const btn = document.getElementById('btnCertificado');
+  btn.textContent = 'Instruccion generada abajo';
+  btn.style.background = 'var(--green)';
+  setTimeout(() => {
+    btn.innerHTML = 'Generar certificado semana <span id="certBtnNum">' + n + '</span>';
+    btn.style.background = '';
+  }, 3000);
+}
+
+// ── HELPERS MENSAJES ─────────────────────────────────────────────────────────
+function showMsg(el, type, html) {
+  el.className = 'confirm-msg ' + type;
+  el.innerHTML = '<span>' + html + '</span>';
+  el.style.display = 'flex';
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => { el.style.display = 'none'; }, 7000);
+}
+
+// ── CARGAR DATOS API (COMPUTO) ───────────────────────────────────────────────
+async function fetchComputo() {
+  if (!serverOnline) return; // usa datos locales ya renderizados
+  try {
+    const r = await fetch(API + '/computo', { signal: AbortSignal.timeout(3000) });
+    if (r.ok) {
+      // si el servidor devuelve computo actualizado, re-renderizar
+      // (por ahora usamos el mismo formato del local)
+    }
+  } catch (_) {}
+}
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+async function init() {
+  initHeader();
+  renderSemanaActiva();
+  renderComputo();
+
+  // Inicializar fecha del ticket con hoy
+  const hoy = new Date().toISOString().split('T')[0];
+  document.getElementById('gastoFecha').value = hoy;
+
+  // Verificar servidor
+  const estado = await checkServer();
+
+  // Renderizar con los datos obtenidos (o null si offline)
+  renderResumen(estado);
+  renderTickets(estado);
+  renderAlertas(estado);
+
+  // Actualizar nombre del proyecto en header
+  document.getElementById('headerProject').textContent = 'Proyecto — Obra Completa';
+}
+
+// Arrancar
+init();
+</script>
+</body>
+</html>

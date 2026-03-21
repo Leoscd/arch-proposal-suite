@@ -283,9 +283,9 @@ Vigas Arriostre    → 1.2 días → $3.418.573
 > Objetivo: dos dashboards servidos por un servidor Python local dentro de Claude Code.
 
 ### 6.1 Crear `scripts/server.py`
-- [ ] Framework: Flask o FastAPI (~120 líneas)
-- [ ] Sirve los archivos HTML estáticos
-- [ ] Expone endpoints REST que leen/escriben los JSON del proyecto
+- [x] Framework: Flask o FastAPI (~120 líneas)
+- [x] Sirve los archivos HTML estáticos
+- [x] Expone endpoints REST que leen/escriben los JSON del proyecto
 
 **Endpoints mínimos:**
 ```
@@ -305,35 +305,35 @@ POST /api/avance           → registra avance semanal
 ---
 
 ### 6.2 Configurar `launch.json`
-- [ ] Agregar entrada `"servidor-obra"` que ejecute `python scripts/server.py`
-- [ ] Puerto: 8080
+- [x] Agregar entrada `"servidor-obra"` que ejecute `python scripts/server.py`
+- [x] Puerto: 8080
 
 ---
 
 ### 6.3 Crear `outputs/dashboard_inversor.html`
 
 **Vista para el cliente/financiador — solo lectura:**
-- [ ] Barra de progreso general: `XX% ejecutado`
-- [ ] Semáforo financiero: verde / amarillo / rojo según gastos vs presupuesto
-- [ ] Tabla de certificados semanales: número, período, monto certificado, estado
-- [ ] Gráfico curva S: planificado (línea azul) vs real (línea verde)
-- [ ] Resumen de gastos: total presupuestado vs total ejecutado vs diferencia
-- [ ] Sin botones de carga — solo lectura
-- [ ] Lenguaje financiero, sin tecnicismos de obra
+- [x] Barra de progreso general: `XX% ejecutado`
+- [x] Semáforo financiero: verde / amarillo / rojo según gastos vs presupuesto
+- [x] Tabla de certificados semanales: número, período, monto certificado, estado
+- [x] Gráfico curva S: planificado (línea azul) vs real (línea verde)
+- [x] Resumen de gastos: total presupuestado vs total ejecutado vs diferencia
+- [x] Sin botones de carga — solo lectura
+- [x] Lenguaje financiero, sin tecnicismos de obra
 
 ---
 
 ### 6.4 Crear `outputs/dashboard_arquitecto.html`
 
 **Vista operativa para el director de obra — lectura + carga:**
-- [ ] Todo lo del dashboard inversor, más:
-- [ ] Panel de tareas de la semana activa con estado (pendiente / en curso / terminado)
-- [ ] Botón "Registrar avance" → formulario que hace POST a `/api/avance`
-- [ ] Botón "Cargar ticket/factura" → formulario que hace POST a `/api/gasto`
-- [ ] Tabla de tickets cargados con emisor, fecha, materiales, monto
-- [ ] Sección cómputo de materiales con cantidades verificables (FASE 4)
-- [ ] Alertas: tareas con holgura cero, materiales sin precio, desvíos > 10%
-- [ ] Botón "Generar certificado semana N" → llama al agente o script
+- [x] Todo lo del dashboard inversor, más:
+- [x] Panel de tareas de la semana activa con estado (pendiente / en curso / terminado)
+- [x] Botón "Registrar avance" → formulario que hace POST a `/api/avance`
+- [x] Botón "Cargar ticket/factura" → formulario que hace POST a `/api/gasto`
+- [x] Tabla de tickets cargados con emisor, fecha, materiales, monto
+- [x] Sección cómputo de materiales con cantidades verificables (FASE 4)
+- [x] Alertas: tareas con holgura cero, materiales sin precio, desvíos > 10%
+- [x] Botón "Generar certificado semana N" → llama al agente o script
 
 ---
 
