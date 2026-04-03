@@ -1,0 +1,87 @@
+{
+  "fecha_generacion": "2026-04-03 13:38:15",
+  "total_presupuesto": 21796200.0,
+  "n_semanas": 5,
+  "fecha_inicio_proyecto": "2026-03-21",
+  "fecha_fin_proyecto": "2026-04-20",
+  "semanas": [
+    {
+      "numero": 1,
+      "fecha_inicio": "2026-03-21",
+      "fecha_fin": "2026-03-27",
+      "rubros_activos": [
+        "TRABAJOS PREPARATORIOS",
+        "MOVIMIENTO DE TIERRA",
+        "CIMIENTOS",
+        "ESTRUCTURAS",
+        "MAMPOSTERÍAS",
+        "REVOQUES"
+      ],
+      "proyectado_materiales": 4727285.28,
+      "proyectado_mo": 2394480.7,
+      "proyectado_total": 7121765.98,
+      "proyectado_acumulado": 7121765.98,
+      "pct_acumulado": 32.67
+    },
+    {
+      "numero": 2,
+      "fecha_inicio": "2026-03-28",
+      "fecha_fin": "2026-04-03",
+      "rubros_activos": [
+        "MOVIMIENTO DE TIERRA",
+        "CIMIENTOS",
+        "ESTRUCTURAS",
+        "MAMPOSTERÍAS",
+        "REVOQUES"
+      ],
+      "proyectado_materiales": 4343048.91,
+      "proyectado_mo": 2153262.52,
+      "proyectado_total": 6496311.44,
+      "proyectado_acumulado": 13618077.42,
+      "pct_acumulado": 62.48
+    },
+    {
+      "numero": 3,
+      "fecha_inicio": "2026-04-04",
+      "fecha_fin": "2026-04-10",
+      "rubros_activos": [
+        "MOVIMIENTO DE TIERRA",
+        "ESTRUCTURAS",
+        "REVOQUES"
+      ],
+      "proyectado_materiales": 2732387.1,
+      "proyectado_mo": 1481051.61,
+      "proyectado_total": 4213438.71,
+      "proyectado_acumulado": 17831516.13,
+      "pct_acumulado": 81.81
+    },
+    {
+      "numero": 4,
+      "fecha_inicio": "2026-04-11",
+      "fecha_fin": "2026-04-17",
+      "rubros_activos": [
+        "MOVIMIENTO DE TIERRA",
+        "ESTRUCTURAS"
+      ],
+      "proyectado_materiales": 1916387.1,
+      "proyectado_mo": 789051.61,
+      "proyectado_total": 2705438.71,
+      "proyectado_acumulado": 20536954.84,
+      "pct_acumulado": 94.22
+    },
+    {
+      "numero": 5,
+      "fecha_inicio": "2026-04-18",
+      "fecha_fin": "2026-04-24",
+      "rubros_activos": [
+        "MOVIMIENTO DE TIERRA",
+        "ESTRUCTURAS"
+      ],
+      "proyectado_materiales": 862451.61,
+      "proyectado_mo": 396793.55,
+      "proyectado_total": 1259245.16,
+      "proyectado_acumulado": 21796200.0,
+      "pct_acumulado": 100.0
+    }
+  ]
+}

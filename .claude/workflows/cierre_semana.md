@@ -143,7 +143,20 @@ Antes de hacer nada, el sistema DEBE calcular el número de semana actual del pr
 }
 ```
 
-3. Agrega un registro al array `"auditorias_completadas"` en `./outputs/estado-proyecto.json`.
+3. Actualiza `./outputs/estado-proyecto.json` con los datos del cierre:
+   - Agrega un registro al array `"avances"`:
+     ```json
+     {
+       "semana": N,
+       "avance_programado_pct": valor_de_fase_2,
+       "avance_real_pct": valor_de_fase_2,
+       "tareas_completadas": lista_confirmada_por_usuario,
+       "fecha_cierre": "YYYY-MM-DD"
+     }
+     ```
+   - Actualiza `"semaforo"` con el valor calculado en FASE 3 (verde/amarillo/rojo).
+   - Actualiza `"metadatos.ultima_actualizacion"` con la fecha de hoy.
+   - **IMPORTANTE:** NO borrar ni sobreescribir `"gastos_reales"` — ese array es acumulativo y solo crece.
 
 ---
 

@@ -1,0 +1,82 @@
+{
+  "generado_en": "2026-04-03T13:56:10.658370",
+  "semana": 1,
+  "semaforo_general": "critico",
+  "rubros_activos": [
+    "TRABAJOS PREPARATORIOS",
+    "MOVIMIENTO DE TIERRA",
+    "CIMIENTOS",
+    "ESTRUCTURAS",
+    "MAMPOSTERÍAS",
+    "REVOQUES"
+  ],
+  "por_rubro": [
+    {
+      "rubro": "TRABAJOS PREPARATORIOS",
+      "proyectado_ars": 22718.93,
+      "real_ars": 0.0,
+      "desvio_ars": -22718.93,
+      "desvio_pct": -100.0,
+      "estado": "critico"
+    },
+    {
+      "rubro": "MOVIMIENTO DE TIERRA",
+      "proyectado_ars": 621651.75,
+      "real_ars": 0.0,
+      "desvio_ars": -621651.75,
+      "desvio_pct": -100.0,
+      "estado": "critico"
+    },
+    {
+      "rubro": "CIMIENTOS",
+      "proyectado_ars": 621651.75,
+      "real_ars": 0.0,
+      "desvio_ars": -621651.75,
+      "desvio_pct": -100.0,
+      "estado": "critico"
+    },
+    {
+      "rubro": "ESTRUCTURAS",
+      "proyectado_ars": 3253535.23,
+      "real_ars": 121000.0,
+      "desvio_ars": -3132535.23,
+      "desvio_pct": -96.28,
+      "estado": "critico"
+    },
+    {
+      "rubro": "MAMPOSTERÍAS",
+      "proyectado_ars": 1320082.11,
+      "real_ars": 0.0,
+      "desvio_ars": -1320082.11,
+      "desvio_pct": -100.0,
+      "estado": "critico"
+    },
+    {
+      "rubro": "REVOQUES",
+      "proyectado_ars": 1282126.19,
+      "real_ars": 0.0,
+      "desvio_ars": -1282126.19,
+      "desvio_pct": -100.0,
+      "estado": "critico"
+    }
+  ],
+  "gastos_asignados": [
+    {
+      "id": "TICK-20260315120000",
+      "proveedor": "CORRALON SAN LORENZO",
+      "fecha": "2026-03-15",
+      "total_ars": 121000.0,
+      "tipo": "factura",
+      "rubro_asignado": "ESTRUCTURAS"
+    }
+  ],
+  "gastos_sin_rubro": [],
+  "totales_semana": {
+    "proyectado_total_ars": 7121765.96,
+    "real_asignado_ars": 121000.0,
+    "real_sin_rubro_ars": 0,
+    "real_total_ars": 121000.0,
+    "desvio_ars": -7000765.96,
+    "desvio_pct": -98.3
+  }
+}

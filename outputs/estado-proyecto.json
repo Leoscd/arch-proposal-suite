@@ -1,14 +1,30 @@
 {
   "metadatos": {
-    "nombre_proyecto": "Arch Proposal Suite",
+    "nombre_proyecto": null,
     "version": "2.0",
     "fecha_creacion": "2026-03-21",
-    "ultima_actualizacion": "2026-03-21"
+    "ultima_actualizacion": "2026-03-21",
+    "ubicacion": null,
+    "tipo_obra": null
   },
   "metricas_base": {
-    "superficie_m2": null,
-    "ubicacion": null,
-    "tipo_obra": null,
+    "superficies": {
+      "cubierta_m2": null,
+      "semicubierta_m2": null,
+      "descubierta_m2": null
+    },
+    "cantidades_estimadas": {
+      "excavacion_m3": null,
+      "cimiento_m3": null,
+      "columna_viga_losa_m3": null,
+      "muro_ladrillo_m2": null,
+      "contrapiso_carpeta_m2": null,
+      "revoque_grueso_m2": null,
+      "revoque_fino_m2": null,
+      "cubierta_chapa_m2": null,
+      "piso_ceramico_m2": null,
+      "pintura_interior_m2": null
+    },
     "personal": {
       "oficiales": 3,
       "ayudantes": 3
@@ -22,7 +38,32 @@
     "ultimo_cronograma": "outputs/cronograma_obra_completa.json",
     "ultimo_presupuesto": null
   },
-  "gastos_reales": [],
-  "avances": [],
+  "gastos_reales": [
+    {
+      "id": "TICK-20260315120000",
+      "tipo": "factura",
+      "proveedor": "CORRALON SAN LORENZO",
+      "fecha": "2026-03-15",
+      "fecha_carga": "2026-03-15 12:00:00",
+      "tiene_iva": true,
+      "items": [
+        {"descripcion": "Cemento Loma Negra", "cantidad": 10, "unidad": "bolsa", "precio_unit": 8500.0, "subtotal": 85000.0},
+        {"descripcion": "Hierro 12mm", "cantidad": 2, "unidad": "barra", "precio_unit": 18000.0, "subtotal": 36000.0}
+      ],
+      "subtotal_neto": 100000.0,
+      "total_iva": 21000.0,
+      "total_ars": 121000.0,
+      "semana": 1
+    }
+  ],
+  "avances": [
+    {
+      "semana": 1,
+      "avance_programado_pct": 0.0,
+      "avance_real_pct": 0.0,
+      "tareas_completadas": [],
+      "fecha_cierre": "2026-03-15"
+    }
+  ],
   "semaforo": "verde"
 }

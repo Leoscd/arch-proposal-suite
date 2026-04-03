@@ -1,0 +1,201 @@
+{
+  "metadatos": {
+    "nombre_proyecto": "Casa Ejemplo",
+    "descripcion": "Vivienda unifamiliar ~80m2 planta baja",
+    "fecha": "2026-04-01",
+    "moneda": "ARS",
+    "ubicacion": "Buenos Aires, Argentina",
+    "superficie_total_m2": 80
+  },
+  "rubros": [
+    {
+      "numero": 1,
+      "nombre": "TRABAJOS PREPARATORIOS",
+      "items": [
+        {
+          "descripcion": "Limpieza y preparación del terreno",
+          "unidad": "m2",
+          "cantidad": 100.0,
+          "precio_unit_mat": 180.0,
+          "precio_unit_mo": 320.0,
+          "total": 50000.0
+        },
+        {
+          "descripcion": "Replanteo y nivelación",
+          "unidad": "m2",
+          "cantidad": 80.0,
+          "precio_unit_mat": 95.0,
+          "precio_unit_mo": 205.0,
+          "total": 24000.0
+        }
+      ],
+      "subtotal_materiales": 22600.0,
+      "subtotal_mo": 51400.0,
+      "subtotal_rubro": 74000.0
+    },
+    {
+      "numero": 2,
+      "nombre": "MOVIMIENTO DE TIERRA",
+      "items": [
+        {
+          "descripcion": "Excavación manual para cimientos (h=0.80m)",
+          "unidad": "m3",
+          "cantidad": 48.0,
+          "precio_unit_mat": 0.0,
+          "precio_unit_mo": 8500.0,
+          "total": 408000.0
+        },
+        {
+          "descripcion": "Retiro y transporte de tierra sobrante",
+          "unidad": "m3",
+          "cantidad": 30.0,
+          "precio_unit_mat": 12000.0,
+          "precio_unit_mo": 3500.0,
+          "total": 465000.0
+        }
+      ],
+      "subtotal_materiales": 360000.0,
+      "subtotal_mo": 513000.0,
+      "subtotal_rubro": 873000.0
+    },
+    {
+      "numero": 3,
+      "nombre": "CIMIENTOS",
+      "items": [
+        {
+          "descripcion": "Encadenado de fundación H° A° 20x50 c/4Ø12 est Ø6 c/20",
+          "unidad": "ml",
+          "cantidad": 60.0,
+          "precio_unit_mat": 18500.0,
+          "precio_unit_mo": 7200.0,
+          "total": 1542000.0
+        },
+        {
+          "descripcion": "Relleno con cascotes y aislación hidrófuga",
+          "unidad": "m2",
+          "cantidad": 80.0,
+          "precio_unit_mat": 4200.0,
+          "precio_unit_mo": 1800.0,
+          "total": 480000.0
+        }
+      ],
+      "subtotal_materiales": 1326000.0,
+      "subtotal_mo": 696000.0,
+      "subtotal_rubro": 2022000.0
+    },
+    {
+      "numero": 4,
+      "nombre": "ESTRUCTURAS",
+      "items": [
+        {
+          "descripcion": "Columnas H° A° 20x20 (h=3m) — H21 c/4Ø12 est Ø6 c/15",
+          "unidad": "m3",
+          "cantidad": 2.4,
+          "precio_unit_mat": 580000.0,
+          "precio_unit_mo": 220000.0,
+          "total": 1920000.0
+        },
+        {
+          "descripcion": "Vigas H° A° 20x40 — H21 c/4Ø16 est Ø6 c/15",
+          "unidad": "m3",
+          "cantidad": 3.2,
+          "precio_unit_mat": 620000.0,
+          "precio_unit_mo": 240000.0,
+          "total": 2752000.0
+        },
+        {
+          "descripcion": "Losa H° A° e=12cm — H21 malla Ø8 c/20x20",
+          "unidad": "m2",
+          "cantidad": 80.0,
+          "precio_unit_mat": 42000.0,
+          "precio_unit_mo": 16500.0,
+          "total": 4700000.0
+        },
+        {
+          "descripcion": "Encofrado y desencofrado general",
+          "unidad": "m2",
+          "cantidad": 120.0,
+          "precio_unit_mat": 8500.0,
+          "precio_unit_mo": 6800.0,
+          "total": 1836000.0
+        }
+      ],
+      "subtotal_materiales": 8168000.0,
+      "subtotal_mo": 3040000.0,
+      "subtotal_rubro": 11208000.0
+    },
+    {
+      "numero": 5,
+      "nombre": "MAMPOSTERÍAS",
+      "items": [
+        {
+          "descripcion": "Mampostería ladrillo hueco 18cm — muros exteriores",
+          "unidad": "m2",
+          "cantidad": 120.0,
+          "precio_unit_mat": 9800.0,
+          "precio_unit_mo": 5200.0,
+          "total": 1800000.0
+        },
+        {
+          "descripcion": "Mampostería ladrillo hueco 12cm — tabiques interiores",
+          "unidad": "m2",
+          "cantidad": 80.0,
+          "precio_unit_mat": 7200.0,
+          "precio_unit_mo": 4100.0,
+          "total": 904000.0
+        },
+        {
+          "descripcion": "Umbrales y dinteles H° A° prefabricado",
+          "unidad": "ml",
+          "cantidad": 24.0,
+          "precio_unit_mat": 12500.0,
+          "precio_unit_mo": 3800.0,
+          "total": 391200.0
+        }
+      ],
+      "subtotal_materiales": 2256960.0,
+      "subtotal_mo": 838240.0,
+      "subtotal_rubro": 3095200.0
+    },
+    {
+      "numero": 6,
+      "nombre": "REVOQUES",
+      "items": [
+        {
+          "descripcion": "Revoque grueso interior — mortero 1:3:10",
+          "unidad": "m2",
+          "cantidad": 200.0,
+          "precio_unit_mat": 3800.0,
+          "precio_unit_mo": 5500.0,
+          "total": 1860000.0
+        },
+        {
+          "descripcion": "Revoque fino interior — Plasticor",
+          "unidad": "m2",
+          "cantidad": 200.0,
+          "precio_unit_mat": 2400.0,
+          "precio_unit_mo": 4200.0,
+          "total": 1320000.0
+        },
+        {
+          "descripcion": "Revoque exterior impermeable — Parex o similar",
+          "unidad": "m2",
+          "cantidad": 120.0,
+          "precio_unit_mat": 5200.0,
+          "precio_unit_mo": 6000.0,
+          "total": 1344000.0
+        }
+      ],
+      "subtotal_materiales": 2448000.0,
+      "subtotal_mo": 2076000.0,
+      "subtotal_rubro": 4524000.0
+    }
+  ],
+  "resumen": {
+    "total_materiales": 14581560.0,
+    "total_mo": 7214640.0,
+    "total_sin_honorarios": 21796200.0,
+    "honorarios": 2179620.0,
+    "total_final": 23975820.0
+  }
+}

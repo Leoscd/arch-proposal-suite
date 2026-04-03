@@ -85,37 +85,89 @@ def calcular_curva_s(cronograma: dict) -> dict:
     return curva
 
 
+def leer_curva_inversion(base_dir: Path, semana_objetivo: int):
+    """
+    Intenta leer curva_inversion.json y devuelve (proyectado_total, proyectado_acumulado, pct_acumulado).
+    Si el archivo no existe o la semana no está presente, devuelve (None, None, None).
+    """
+    ruta_curva = base_dir / "outputs" / "curva_inversion.json"
+    if not ruta_curva.exists():
+        return None, None, None
+    try:
+        with ruta_curva.open(encoding="utf-8") as f:
+            curva = json.load(f)
+        for semana in curva.get("semanas", []):
+            if semana.get("numero") == semana_objetivo:
+                return (
+                    semana.get("proyectado_total", 0.0),
+                    semana.get("proyectado_acumulado", 0.0),
+                    semana.get("pct_acumulado", 0.0),
+                )
+    except (json.JSONDecodeError, KeyError):
+        pass
+    return None, None, None
+
+
 def generate_weekly_certificate(semana_objetivo, ruta_gastos, ruta_presupuesto, ruta_cronograma, ruta_salida):
     """
     Genera el cruce entre los gastos reales y el presupuesto teórico.
+    Lee gastos_reales[] desde estado-proyecto.json (fuente única de verdad).
     """
     print(f"[{datetime.now().strftime('%H:%M:%S')}] Generando Certificado para la Semana {semana_objetivo}...")
-    
-    # 1. Cargar Datos
-    gastos_db = load_json(ruta_gastos).get("gastos", [])
 
-    # Calcular presupuesto teórico semanal desde la curva S del cronograma
-    cronograma = load_json(ruta_cronograma)
-    curva_s = calcular_curva_s(cronograma)
-    clave_semana = f"semana_{semana_objetivo}"
-    presupuesto_teorico_semanal = curva_s.get(clave_semana, 0.0)
-    
-    # 2. Filtrar Gastos (Acá en prod filtraríamos por fecha coincidente con la "Semana X")
-    # Para la demo, tomaremos todos los tickets ingresados como parte de este periodo.
+    # 1. Cargar Datos — leer de estado-proyecto.json (fuente única de verdad)
+    estado = load_json(ruta_gastos)
+    todos_los_gastos = estado.get("gastos_reales", [])
+
+    # Filtrar gastos que pertenecen a la semana objetivo
+    gastos_db = [g for g in todos_los_gastos if g.get("semana") == semana_objetivo]
+    # Fallback: si ningún gasto tiene campo "semana", tomar todos (compatibilidad)
+    if not gastos_db and todos_los_gastos:
+        gastos_db = todos_los_gastos
+
+    # Determinar presupuesto teórico semanal:
+    # Primero intentar desde curva_inversion.json (basada en presupuesto_base.json real).
+    # Si no existe, usar calcular_curva_s() sobre el cronograma como fallback.
+    proyectado_curva, proyectado_acumulado, pct_acumulado_curva = leer_curva_inversion(BASE_DIR, semana_objetivo)
+
+    if proyectado_curva is not None:
+        presupuesto_teorico_semanal = proyectado_curva
+        fuente_proyectado = "curva_inversion.json"
+        print(f"[Curva] Usando curva_inversion.json — semana {semana_objetivo}: {m(presupuesto_teorico_semanal)}")
+    else:
+        cronograma = load_json(ruta_cronograma)
+        curva_s = calcular_curva_s(cronograma)
+        clave_semana = f"semana_{semana_objetivo}"
+        presupuesto_teorico_semanal = curva_s.get(clave_semana, 0.0)
+        proyectado_acumulado = None
+        pct_acumulado_curva = None
+        fuente_proyectado = "curva_s (fallback desde cronograma)"
+        print(f"[Curva] curva_inversion.json no encontrada — usando calcular_curva_s() como fallback.")
+
+    # 2. Gastos del período ya filtrados por semana arriba
     gastos_periodo = gastos_db
-    
+
     # 3. Matemática de Auditoría
     total_materiales = sum(g.get("subtotal_neto", 0) for g in gastos_periodo)
     total_iva = sum(g.get("total_iva", 0) for g in gastos_periodo)
-    total_real = sum(g.get("total_factura", 0) for g in gastos_periodo)
+    total_real = sum(g.get("total_ars", g.get("total_factura", 0)) for g in gastos_periodo)
     
     desvio = presupuesto_teorico_semanal - total_real
     estado_desvio = "<span style='color: #10B981; font-weight: bold;'>BAJO PRESUPUESTO</span>" if desvio >= 0 else "<span style='color: #EF4444; font-weight: bold;'>SOBREPRESUPUESTO</span>"
     pct_consumido = (total_real / presupuesto_teorico_semanal) * 100 if presupuesto_teorico_semanal > 0 else 0
     
+    # Fila opcional % acumulado de la curva de inversión
+    fila_pct_acumulado = ""
+    if pct_acumulado_curva is not None and proyectado_acumulado is not None:
+        fila_pct_acumulado = (
+            f"| **Inversión Acumulada Proyectada:** | {m(proyectado_acumulado)} |\n"
+            f"| **% Avance Acumulado (curva):** | {pct_acumulado_curva:.1f}% del presupuesto total |\n"
+        )
+
     # 4. Generar Reporte Markdown Estético
     md = f"""# Certificado de Obra - SEMANA {semana_objetivo}
 *Generado el: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
+*Fuente del proyectado: {fuente_proyectado}*
 
 ## Curva de Inversión y Auditoría
 
@@ -125,6 +177,7 @@ def generate_weekly_certificate(semana_objetivo, ruta_gastos, ruta_presupuesto, 
 | **Inversión Real Ejecutada:** | {m(total_real)} |
 | **Desvío del Período:** | {m(abs(desvio))} |
 | **Estado:** | {estado_desvio} ({pct_consumido:.1f}% de lo proyectado) |
+{fila_pct_acumulado}
 
 ---
 
@@ -136,17 +189,23 @@ def generate_weekly_certificate(semana_objetivo, ruta_gastos, ruta_presupuesto, 
         md += "> *No se han registrado facturas ni movimientos en este período.*\n\n"
     else:
         for idx, gasto in enumerate(gastos_periodo, 1):
-            md += f"### {idx}. {gasto.get('emisor', 'Proveedor')} \n"
+            proveedor = gasto.get("proveedor", gasto.get("emisor", "Proveedor"))
+            tipo = gasto.get("tipo", "factura").upper()
+            total = gasto.get("total_ars", gasto.get("total_factura", 0))
+            md += f"### {idx}. {proveedor} `[{tipo}]`\n"
             md += f"- **ID Ticket:** `{gasto.get('id', 'N/A')}`\n"
             md += f"- **Fecha:** {gasto.get('fecha', 'N/A')}\n"
-            md += f"- **Total Facturado:** **{m(gasto.get('total_factura', 0))}**\n\n"
-            
+            md += f"- **Total:** **{m(total)}**\n\n"
+
             # Tabla desplegable (detalles)
-            md += "<details><summary>👉 Ver detalle de materiales facturados</summary>\n\n"
+            md += "<details><summary>👉 Ver detalle de materiales</summary>\n\n"
             md += "| Ítem | Cantidad | Unidad | P.Unit | Subtotal |\n"
             md += "| :--- | :---: | :---: | :---: | :---: |\n"
-            for mat in gasto.get("materiales", []):
-                md += f"| {mat.get('nombre')} | {mat.get('cantidad')} | {mat.get('unidad')} | {m(mat.get('precio_unitario',0))} | *{m(mat.get('subtotal',0))}* |\n"
+            # Soporta tanto "items" (schema nuevo) como "materiales" (schema legacy)
+            for mat in gasto.get("items", gasto.get("materiales", [])):
+                nombre = mat.get("descripcion", mat.get("nombre", ""))
+                precio = mat.get("precio_unit", mat.get("precio_unitario", 0))
+                md += f"| {nombre} | {mat.get('cantidad')} | {mat.get('unidad')} | {m(precio)} | *{m(mat.get('subtotal',0))}* |\n"
             md += "\n</details>\n\n<br>\n"
             
     md += """
@@ -178,8 +237,8 @@ def main():
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     out_dir = os.path.join(base_dir, "outputs")
     
-    ruta_gastos = os.path.join(out_dir, "gastos_ejecutados.json")
-    # Los siguientes no existen aún realmente, es la interfaz para el futuro
+    # Fuente única de verdad: estado-proyecto.json (gastos_reales[])
+    ruta_gastos = os.path.join(out_dir, "estado-proyecto.json")
     ruta_presu = os.path.join(out_dir, "presupuesto_referencia.json")
     ruta_crono = os.path.join(out_dir, "cronograma.json")
 

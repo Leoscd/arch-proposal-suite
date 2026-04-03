@@ -45,7 +45,22 @@ Tu objetivo fundamental es crear o actualizar el archivo `./estado-proyecto.json
    Una vez que tienes las medidas o una referencia clara, usa tus capacidades lógicas para calcular superficies (m²) y volúmenes (m³) de los rubros constructivos que identifiques como necesarios (ej. si ves paredes de ladrillo sin terminar, calcula los m2 de revoque; si el lote está vacío, estima m3 de cimiento y m2 de contrapiso).
 
 6. **Inicialización del JSON:**
-   Abre el archivo `./estado-proyecto.json`. Escribe o actualiza el bloque `"metricas_base"` siguiendo EXACTAMENTE esta estructura matemática:
+   Abre el archivo `./estado-proyecto.json`. Escribe o actualiza los siguientes bloques:
+
+   **Primero, actualiza `metadatos`** con la información del cartel del plano (title block):
+   ```json
+   "metadatos": {
+     "nombre_proyecto": "Nombre del proyecto según el plano",
+     "ubicacion": "Ciudad, Provincia",
+     "tipo_obra": "construccion_nueva | remodelacion | ampliacion | refaccion",
+     "fecha_creacion": "YYYY-MM-DD",
+     "ultima_actualizacion": "YYYY-MM-DD",
+     "version": "2.0"
+   }
+   ```
+   Si alguno de estos datos no está en el plano, preguntá al usuario antes de continuar.
+
+   **Luego, actualiza `metricas_base`** siguiendo EXACTAMENTE esta estructura matemática:
    ```json
    "metricas_base": {
      "superficies": {
@@ -53,7 +68,7 @@ Tu objetivo fundamental es crear o actualizar el archivo `./estado-proyecto.json
        "semicubierta_m2": 0.0,
        "descubierta_m2": 0.0
      },
-     "cantidades_estimadas_por_foto_o_plano": {
+     "cantidades_estimadas": {
        "excavacion_m3": 0.0,
        "cimiento_m3": 0.0,
        "columna_viga_losa_m3": 0.0,

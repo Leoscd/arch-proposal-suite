@@ -15,6 +15,28 @@ def setup_client():
         raise ValueError("Falta la variable de entorno GEMINI_API_KEY")
     return genai.Client()
 
+# Palabras clave para detección de tipo de comprobante
+_KEYWORDS_FACTURA = {"FACTURA", "FCA", "FCB", "FC A", "FC B", "CUIT"}
+_KEYWORDS_REMITO  = {"REMITO", "REM."}
+_KEYWORDS_PAGO_MO = {"RECIBO", "JORNAL", "CUADRILLA", "OFICIAL", "AYUDANTE"}
+_KEYWORDS_IVA     = {"IVA", "TOTAL"}
+
+def detect_tipo(text: str) -> str:
+    """
+    Detecta el tipo de comprobante a partir del texto OCR o del JSON extraído.
+    Jerarquía: factura > pago_mo > remito. Default: 'factura'.
+    """
+    upper = text.upper()
+    if any(kw in upper for kw in _KEYWORDS_FACTURA):
+        return "factura"
+    if any(kw in upper for kw in _KEYWORDS_PAGO_MO):
+        return "pago_mo"
+    if any(kw in upper for kw in _KEYWORDS_REMITO):
+        has_iva = any(kw in upper for kw in _KEYWORDS_IVA)
+        if not has_iva:
+            return "remito"
+    return "factura"
+
 def extract_receipt_data(client, image_path):
     """
     Envía la imagen de la factura al LLM de visión para extraer los datos estructurados.
@@ -24,33 +46,63 @@ def extract_receipt_data(client, image_path):
     # Preparamos la imagen
     img = Image.open(image_path)
     
-    # Prompt estricto para extraer JSON
+    # Prompt con detección de tipo y schema unificado
     prompt = """
-    Eres el Agente de Costos experto en extraer datos contables de tickets y facturas de materiales de construcción.
-    Analiza esta factura/ticket y extrae los siguientes datos EXCLUSIVAMENTE en formato JSON válido, sin markdown ni explicaciones adicionales:
-    
+    Eres el Agente de Costos experto en extraer datos contables de comprobantes de obra.
+    Primero identifica el TIPO de comprobante:
+    - Si contiene "FACTURA", "FCA", "FCB", "FC A", "FC B" o "CUIT" → tipo = "factura"
+    - Si contiene "REMITO" o "REM." sin mencionar IVA ni total → tipo = "remito"
+    - Si contiene "RECIBO", "JORNAL", "CUADRILLA", "OFICIAL" o "AYUDANTE" → tipo = "pago_mo"
+    - Si no podés determinarlo → tipo = "factura"
+    Jerarquía si hay señales mixtas: factura > pago_mo > remito.
+
+    Devolvé EXCLUSIVAMENTE JSON válido sin markdown según el tipo detectado:
+
+    Para tipo "factura":
     {
-        "emisor": "Nombre del proveedor o corralón",
-        "fecha": "YYYY-MM-DD" (o null si no se encuentra),
-        "tiene_iva": true/false (true si detalla IVA o dice Factura A, false si es B/C o Consumidor Final sin detallar),
-        "materiales": [
-            {
-                "nombre": "Descripción del artículo",
-                "cantidad": 1.5,
-                "unidad": "u, kg, m, m2, m3, lt, bolsa, etc",
-                "precio_unitario": 1500.50,
-                "subtotal": 2250.75
-            }
-        ],
+        "tipo": "factura",
+        "emisor": "Nombre del proveedor",
+        "cuit": "XX-XXXXXXXX-X o null",
+        "numero_factura": "0001-00012345 o null",
+        "fecha": "YYYY-MM-DD o null",
+        "tiene_iva": true,
+        "items": [{"descripcion": "...", "cantidad": 1.0, "unidad": "u", "precio_unit": 0.0, "subtotal": 0.0}],
         "subtotal_neto": 0.0,
         "total_iva": 0.0,
-        "total_factura": 0.0
+        "total_ars": 0.0,
+        "precio_pendiente": false
     }
-    
-    Reglas:
-    - Todos los montos deben ser números flotantes en Pesos Argentinos (ARS), sin símbolo "$" ni comas para miles.
-    - Si un material no tiene unidad clara, asigna "un" (unidad).
-    - Asegúrate de que la suma de "subtotal" de materiales coincida aprox con el total.
+
+    Para tipo "remito":
+    {
+        "tipo": "remito",
+        "proveedor": "Nombre del proveedor",
+        "numero_remito": "...",
+        "fecha": "YYYY-MM-DD o null",
+        "tiene_iva": false,
+        "items": [{"descripcion": "...", "cantidad": 1.0, "unidad": "u", "precio_unit": 0.0, "subtotal": 0.0}],
+        "total_ars": 0.0,
+        "precio_pendiente": true
+    }
+
+    Para tipo "pago_mo":
+    {
+        "tipo": "pago_mo",
+        "trabajador": "Nombre completo o cuadrilla",
+        "categoria": "Oficial / Ayudante / Medio Oficial",
+        "periodo": "YYYY-MM-DD / YYYY-MM-DD",
+        "horas": 0.0,
+        "jornales": 0.0,
+        "importe": 0.0,
+        "total_ars": 0.0,
+        "tiene_iva": false,
+        "precio_pendiente": false
+    }
+
+    Reglas generales:
+    - Todos los montos en Pesos Argentinos (ARS), sin símbolo "$" ni comas para miles.
+    - Si un material no tiene unidad clara, asignar "un".
+    - Para remitos sin precios: total_ars = 0.0 y precio_pendiente = true.
     """
 
     try:
@@ -87,7 +139,10 @@ def save_to_db(data, db_path):
     gasto_id = f"TICK-{datetime.now().strftime('%Y%m%d%H%M%S')}"
     data["id"] = gasto_id
     data["fecha_carga"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
+    # Compatibilidad: documentos sin campo 'tipo' se tratan como factura
+    if "tipo" not in data:
+        data["tipo"] = "factura"
+
     db["gastos"].append(data)
     
     # Guardar
@@ -103,29 +158,51 @@ def generate_markdown_report(data, image_filename, report_path):
     def m(val):
         return f"$ {val:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
         
+    tipo = data.get("tipo", "factura")
+    tipo_label = {"factura": "Factura", "remito": "Remito", "pago_mo": "Pago Mano de Obra"}.get(tipo, tipo)
+    emisor = data.get("emisor") or data.get("proveedor") or data.get("trabajador", "Desconocido")
+    pendiente_str = "Sí — factura por recibir" if data.get("precio_pendiente") else "No"
+
     md = f"""# Reporte de Ticket Procesado
 
-**Emisor:** {data.get("emisor", "Desconocido")}  
-**Fecha de Ticket:** {data.get("fecha", "No detectada")}  
-**Condición IVA:** {"Discriminado (A)" if data.get("tiene_iva") else "Consumidor Final (B/C/T)"}  
+**Tipo de Comprobante:** {tipo_label}
+**Emisor:** {emisor}
+**Fecha de Ticket:** {data.get("fecha", "No detectada")}
+**Condición IVA:** {"Discriminado (A)" if data.get("tiene_iva") else "No aplica / Consumidor Final"}
+**Precio Pendiente:** {pendiente_str}
 
-## Detalle de Materiales Extraídos
+"""
 
-| Material | Cantidad | Unidad | P. Unitario | Subtotal |
+    if tipo == "pago_mo":
+        md += f"""## Detalle de Mano de Obra
+
+| Trabajador | Categoría | Período | Horas | Jornales | Importe |
+| :--- | :--- | :--- | :---: | :---: | :---: |
+| {data.get('trabajador','—')} | {data.get('categoria','—')} | {data.get('periodo','—')} | {data.get('horas',0)} | {data.get('jornales',0)} | **{m(data.get('total_ars',0))}** |
+
+"""
+    else:
+        md += """## Detalle de Ítems
+
+| Ítem | Cantidad | Unidad | P. Unitario | Subtotal |
 | :--- | :---: | :---: | :---: | :---: |
 """
-    
-    for mat in data.get("materiales", []):
-        md += f"| {mat.get('nombre')} | {mat.get('cantidad')} | {mat.get('unidad')} | {m(mat.get('precio_unitario', 0))} | **{m(mat.get('subtotal', 0))}** |\n"
-        
-    md += f"""
----
-**Subtotal Neto:** {m(data.get("subtotal_neto", 0))}  
-**IVA:** {m(data.get("total_iva", 0))}  
-### **TOTAL FACTURA:** {m(data.get("total_factura", 0))}
+        # Soporta tanto "items" (schema nuevo) como "materiales" (legacy)
+        for mat in data.get("items", data.get("materiales", [])):
+            nombre = mat.get("descripcion", mat.get("nombre", ""))
+            precio = mat.get("precio_unit", mat.get("precio_unitario", 0))
+            md += f"| {nombre} | {mat.get('cantidad')} | {mat.get('unidad')} | {m(precio)} | **{m(mat.get('subtotal', 0))}** |\n"
 
-> *Dato guardado exitosamente en la base de datos del Agente Costos como ID: `{data.get("id")}`*
+        total_ars = data.get("total_ars", data.get("total_factura", 0))
+        md += f"""
+---
+**Subtotal Neto:** {m(data.get("subtotal_neto", 0))}
+**IVA:** {m(data.get("total_iva", 0))}
+### **TOTAL:** {m(total_ars)}
+
 """
+
+    md += f"> *Dato guardado exitosamente como ID: `{data.get('id')}`*\n"
 
     # Modo append o crear nuevo (separador si ya existe)
     mode = 'a' if os.path.exists(report_path) else 'w'
